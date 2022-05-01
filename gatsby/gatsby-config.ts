@@ -1,4 +1,6 @@
-import type { GatsbyConfig } from "gatsby"
+import type { GatsbyConfig } from 'gatsby';
+
+import './types/types.d';
 
 const config: GatsbyConfig = {
   siteMetadata: {
@@ -6,6 +8,6 @@ const config: GatsbyConfig = {
     siteUrl: `https://www.yourdomain.tld`,
   },
   plugins: [],
-}
+};
 
-export default config
+export default config;
