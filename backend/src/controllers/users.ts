@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { generateToken } from '../utils/auth';
 import bcrypt from 'bcrypt';
-import _ from 'lodash';
 import { prisma } from '../../prisma/client';
+import { peelUser } from '../utils/response';
 
 export const login = async (req: Request, res: Response) => {
   const { password, email } = req.body.user;
@@ -14,8 +14,8 @@ export const login = async (req: Request, res: Response) => {
   const passwordCorrect = await bcrypt.compare(password, user.password!);
   if (!passwordCorrect) return res.status(401).send('Invalid credentials');
 
-  const token = generateToken(user.username);
-  const reducedUser = _.pick(user, ['email', 'username', 'bio', 'image']);
+  const token = generateToken({ username: user.username, id: user.id });
+  const reducedUser = peelUser(user);
 
   return res.status(200).send({ user: { ...reducedUser, token } });
 };

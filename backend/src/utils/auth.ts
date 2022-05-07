@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { TokenData } from '../models/auth';
 
 export const authenticateToken = (
   req: Request,
@@ -13,15 +14,17 @@ export const authenticateToken = (
 
   const tokenSecret = process.env.TOKEN_SECRET as string;
 
-  jwt.verify(token, tokenSecret, (err) => {
+  jwt.verify(token, tokenSecret, (err, tokenData) => {
     if (err) return res.status(403).send('Invalid token');
+
+    res.locals.tokenData = tokenData;
 
     next();
   });
 };
 
-export const generateToken = (username: string) => {
+export const generateToken = (tokenData: TokenData) => {
   const tokenSecret = process.env.TOKEN_SECRET as string;
 
-  return jwt.sign(username, tokenSecret);
+  return jwt.sign(tokenData, tokenSecret);
 };
