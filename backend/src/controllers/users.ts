@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import { generateToken } from '../utils/auth';
+import bcrypt from 'bcrypt';
+import _ from 'lodash';
 const prisma = new PrismaClient();
 
 export const login = async (req: Request, res: Response) => {
@@ -10,9 +12,14 @@ export const login = async (req: Request, res: Response) => {
   const user = await prisma.user.findUnique({ where: { email: email } });
   if (!user) return res.status(400).send('User not exists');
 
+  const passwordCorrect = await bcrypt.compare(password, user.password!);
+  if (!passwordCorrect) return res.status(401);
+
   const token = generateToken(user.username);
 
-  return res.status(200).send({ user: { ...user, token } });
+  const reducedUser = _.pick(user, ['email', 'username', 'bio', 'image']);
+
+  return res.status(200).send({ user: { ...reducedUser, token } });
 };
 
 export const register = async (req: Request, res: Response) => {
@@ -32,7 +39,10 @@ export const register = async (req: Request, res: Response) => {
   });
   if (users.length) return res.status(400).send('User already exists');
 
-  const user = await prisma.user.create({ data: { email, username } });
+  const hash = await bcrypt.hash(password, 10);
+  const user = await prisma.user.create({
+    data: { email, username, password: hash },
+  });
 
   return res.status(200).send({ user });
 };
