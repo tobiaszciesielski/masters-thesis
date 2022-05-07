@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { TokenData } from '../models/auth';
+import bcrypt from 'bcrypt';
 
 export const authenticateToken = (
   req: Request,
@@ -27,4 +28,8 @@ export const generateToken = (tokenData: TokenData) => {
   const tokenSecret = process.env.TOKEN_SECRET as string;
 
   return jwt.sign(tokenData, tokenSecret);
+};
+
+export const hashPassword = async (password: string) => {
+  return bcrypt.hash(password, 10);
 };

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { generateToken } from '../utils/auth';
+import { generateToken, hashPassword } from '../utils/auth';
 import bcrypt from 'bcrypt';
 import { prisma } from '../../prisma/client';
 import { peelUser } from '../utils/response';
@@ -37,7 +37,7 @@ export const register = async (req: Request, res: Response) => {
   });
   if (users.length) return res.status(400).send('User already exists');
 
-  const hash = await bcrypt.hash(password, 10);
+  const hash = await hashPassword(password);
   const user = await prisma.user.create({
     data: { email, username, password: hash },
   });
