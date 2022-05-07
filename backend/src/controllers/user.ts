@@ -25,6 +25,21 @@ export const updateUser = async (req: Request, res: Response) => {
 
   const { id } = res.locals.tokenData;
 
+  const users = await prisma.user.findMany({
+    where: {
+      OR: [
+        {
+          email,
+        },
+        { username },
+      ],
+      NOT: [{ id }],
+    },
+  });
+
+  if (users.length)
+    return res.status(400).send('Email or username must be unique');
+
   const user = await prisma.user.update({
     where: { id },
     data: { email, username, password, image, bio },

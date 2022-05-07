@@ -42,5 +42,8 @@ export const register = async (req: Request, res: Response) => {
     data: { email, username, password: hash },
   });
 
-  return res.status(200).send({ user });
+  const token = generateToken({ username: user.username, id: user.id });
+  const reducedUser = peelUser(user);
+
+  return res.status(200).send({ user: { ...reducedUser, token } });
 };

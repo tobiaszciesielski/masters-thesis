@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { getCurrentUser, updateUser } from '../controllers/user';
 
-import { authenticateToken } from '../utils/auth';
+import { optionalAuth, requiredAuth } from '../utils/auth';
 
 const userRouter = Router();
 
-userRouter.get('/', authenticateToken, getCurrentUser);
-userRouter.put('/', authenticateToken, updateUser);
+userRouter.get('/', requiredAuth, getCurrentUser);
+userRouter.put('/', requiredAuth, updateUser);
 
 export { userRouter };

@@ -2,32 +2,47 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { TokenData } from '../models/auth';
 import bcrypt from 'bcrypt';
+import { IncomingHttpHeaders } from 'http';
+import { TOKEN_SECRET } from './config';
 
-export const authenticateToken = (
+export const verifyToken = async (
+  headers: IncomingHttpHeaders
+): Promise<TokenData | undefined> => {
+  const authHeader = headers.authorization;
+
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) {
+    return undefined;
+  }
+
+  return jwt.verify(token, TOKEN_SECRET) as Promise<TokenData>;
+};
+
+export const optionalAuth = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const authHeader = req.headers.authorization;
+  const tokenData = await verifyToken(req.headers);
 
-  const token = authHeader && authHeader.split(' ')[1];
-  if (!token) return res.status(401).send('Token not provided');
+  res.locals.tokenData = tokenData;
+  next();
+};
 
-  const tokenSecret = process.env.TOKEN_SECRET as string;
+export const requiredAuth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const tokenData = await verifyToken(req.headers);
+  if (!tokenData) return res.status(403).send('Forbidden');
 
-  jwt.verify(token, tokenSecret, (err, tokenData) => {
-    if (err) return res.status(403).send('Invalid token');
-
-    res.locals.tokenData = tokenData;
-
-    next();
-  });
+  res.locals.tokenData = tokenData;
+  next();
 };
 
 export const generateToken = (tokenData: TokenData) => {
-  const tokenSecret = process.env.TOKEN_SECRET as string;
-
-  return jwt.sign(tokenData, tokenSecret);
+  return jwt.sign(tokenData, TOKEN_SECRET);
 };
 
 export const hashPassword = async (password: string) => {
