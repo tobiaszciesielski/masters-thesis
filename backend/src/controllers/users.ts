@@ -13,10 +13,9 @@ export const login = async (req: Request, res: Response) => {
   if (!user) return res.status(400).send('User not exists');
 
   const passwordCorrect = await bcrypt.compare(password, user.password!);
-  if (!passwordCorrect) return res.status(401);
+  if (!passwordCorrect) return res.status(401).send('Invalid credentials');
 
   const token = generateToken(user.username);
-
   const reducedUser = _.pick(user, ['email', 'username', 'bio', 'image']);
 
   return res.status(200).send({ user: { ...reducedUser, token } });

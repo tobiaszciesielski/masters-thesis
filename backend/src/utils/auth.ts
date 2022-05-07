@@ -9,12 +9,12 @@ export const authenticateToken = (
   const authHeader = req.headers.authorization;
 
   const token = authHeader && authHeader.split(' ')[1];
-  if (!token) return res.sendStatus(401);
+  if (!token) return res.status(401).send('Token not provided');
 
   const tokenSecret = process.env.TOKEN_SECRET as string;
 
   jwt.verify(token, tokenSecret, (err) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.status(403).send('Invalid token');
 
     next();
   });
