@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { getProfile } from '../controllers/profiles';
-import { optionalAuth } from '../utils/auth';
+import { follow, getProfile } from '../controllers/profiles';
+import { optionalAuth, requiredAuth } from '../utils/auth';
 
 const profilesRouter = Router();
 
 profilesRouter.get('/:username', optionalAuth, getProfile);
-profilesRouter.put('/', optionalAuth);
+profilesRouter.post('/:username/follow', requiredAuth, follow);
 
 export { profilesRouter };

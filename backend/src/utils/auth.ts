@@ -5,9 +5,9 @@ import bcrypt from 'bcrypt';
 import { IncomingHttpHeaders } from 'http';
 import { TOKEN_SECRET } from './config';
 
-export const verifyToken = async (
+export const verifyToken = (
   headers: IncomingHttpHeaders
-): Promise<TokenData | undefined> => {
+): TokenData | undefined => {
   const authHeader = headers.authorization;
 
   const token = authHeader && authHeader.split(' ')[1];
@@ -15,7 +15,12 @@ export const verifyToken = async (
     return undefined;
   }
 
-  return jwt.verify(token, TOKEN_SECRET) as Promise<TokenData>;
+  try {
+    const tokenData = jwt.verify(token, TOKEN_SECRET) as TokenData;
+    return tokenData;
+  } catch (err) {
+    return undefined;
+  }
 };
 
 export const optionalAuth = async (
