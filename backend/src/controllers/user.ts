@@ -2,17 +2,18 @@ import { Request, Response } from 'express';
 import { prisma } from '../../prisma/client';
 import { TokenData } from '../models/auth';
 import { hashPassword } from '../utils/auth';
-import { peelUser } from '../utils/response';
+import { USER_SELECT } from '../utils/select';
 
 export const getCurrentUser = async (req: Request, res: Response) => {
   const { id } = res.locals.tokenData as TokenData;
 
-  const currentUser = await prisma.user.findUnique({ where: { id } });
+  const currentUser = await prisma.user.findUnique({
+    where: { id },
+    select: USER_SELECT,
+  });
   if (!currentUser) res.send(404).send('User not found');
 
-  const reducedUser = peelUser(currentUser!);
-
-  res.status(200).send({ user: reducedUser });
+  res.status(200).send({ user: currentUser });
 };
 
 export const updateUser = async (req: Request, res: Response) => {
@@ -43,6 +44,7 @@ export const updateUser = async (req: Request, res: Response) => {
   const user = await prisma.user.update({
     where: { id },
     data: { email, username, password, image, bio },
+    select: USER_SELECT,
   });
   if (!user) return res.status(400).send("Couldn't update user");
 
