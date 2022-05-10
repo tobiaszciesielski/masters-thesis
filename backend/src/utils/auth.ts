@@ -47,6 +47,7 @@ export const requiredAuth = async (
 };
 
 export const readTokenData = (res: Response): TokenData | undefined => {
+  console.log(res.locals);
   const data = res.locals.tokenData as TokenData;
   return data || undefined;
 };

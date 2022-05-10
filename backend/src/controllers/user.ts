@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
 import { prisma } from '../../prisma/client';
-import { TokenData } from '../models/auth';
 import { hashPassword, readTokenData } from '../utils/auth';
 import { USER_SELECT } from '../utils/select';
 
 export const getCurrentUser = async (req: Request, res: Response) => {
   const tokenData = readTokenData(res);
+  if (!tokenData) return res.sendStatus(404);
 
   const currentUser = await prisma.user.findUnique({
-    where: { id: tokenData?.id },
+    where: { id: tokenData.userId },
     select: USER_SELECT,
   });
   if (!currentUser) res.send(404).send('User not found');
@@ -25,6 +25,7 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 
   const tokenData = readTokenData(res);
+  if (!tokenData) return res.sendStatus(404);
 
   const users = await prisma.user.findMany({
     where: {
@@ -34,7 +35,7 @@ export const updateUser = async (req: Request, res: Response) => {
         },
         { username },
       ],
-      NOT: [{ id: tokenData?.id }],
+      NOT: [{ id: tokenData.userId }],
     },
   });
 
@@ -42,7 +43,7 @@ export const updateUser = async (req: Request, res: Response) => {
     return res.status(400).send('Email or username must be unique');
 
   const user = await prisma.user.update({
-    where: { id: tokenData?.id },
+    where: { id: tokenData.userId },
     data: { email, username, password, image, bio },
     select: USER_SELECT,
   });

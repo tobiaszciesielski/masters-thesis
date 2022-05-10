@@ -19,13 +19,13 @@ export const getProfile = async (req: Request, res: Response) => {
   let following = false;
 
   const tokenData = readTokenData(res);
-  if (tokenData?.id) {
+  if (tokenData?.userId) {
     const userFollowingProfle = await prisma.user.findMany({
       where: {
         AND: [
           { id: profileId },
           {
-            followedBy: { some: { id: tokenData.id } },
+            followedBy: { some: { id: tokenData.userId } },
           },
         ],
       },
@@ -51,7 +51,7 @@ export const follow = async (req: Request, res: Response) => {
   if (!tokenData) return res.sendStatus(403);
 
   await prisma.user.update({
-    where: { id: tokenData?.id },
+    where: { id: tokenData?.userId },
     data: {
       following: {
         connect: { id: userToFollow.id },
@@ -79,7 +79,7 @@ export const unfollow = async (req: Request, res: Response) => {
   if (!tokenData) return res.sendStatus(403);
 
   await prisma.user.update({
-    where: { id: tokenData?.id },
+    where: { id: tokenData.userId },
     data: { following: { disconnect: { id: userToUnfollow.id } } },
   });
 
