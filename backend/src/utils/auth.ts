@@ -46,6 +46,11 @@ export const requiredAuth = async (
   next();
 };
 
+export const readTokenData = (res: Response): TokenData | undefined => {
+  const data = res.locals.tokenData as TokenData;
+  return data || undefined;
+};
+
 export const generateToken = (tokenData: TokenData) => {
   return jwt.sign(tokenData, TOKEN_SECRET);
 };
