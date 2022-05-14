@@ -5,18 +5,20 @@ import { prisma } from '../../prisma/client';
 import { DETAILED_USER_SELECT } from '../utils/select';
 
 export const login = async (req: Request, res: Response) => {
-  const { password, email } = req.body.user;
-  if (!password || !email) return res.status(400).send('Bad request');
+  const payload = req.body.user;
+
+  if (!payload || !payload.password || !payload.email)
+    return res.sendStatus(400);
 
   const user = await prisma.user.findUnique({
-    where: { email: email },
+    where: { email: payload.email },
     select: DETAILED_USER_SELECT,
   });
-  if (!user) return res.status(400).send('User not exists');
+  if (!user) return res.status(404).send('User not exists');
 
   const { id, password: userPassword, ...reducedUser } = user;
 
-  const passwordCorrect = await bcrypt.compare(password, userPassword!);
+  const passwordCorrect = await bcrypt.compare(payload.password, userPassword!);
   if (!passwordCorrect) return res.status(401).send('Invalid credentials');
 
   const token = generateToken({ userId: id });
@@ -24,10 +26,12 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const register = async (req: Request, res: Response) => {
-  const { password, email, username } = req.body.user;
-  if (!password || !email || !username)
-    return res.status(400).send('Bad request');
+  const payload = req.body.user;
 
+  if (!payload || !payload.password || !payload.email || !payload.username)
+    return res.sendStatus(400);
+
+  const { email, password, username } = payload;
   const users = await prisma.user.findMany({
     where: {
       OR: [

@@ -17,11 +17,13 @@ export const getCurrentUser = async (req: Request, res: Response) => {
 };
 
 export const updateUser = async (req: Request, res: Response) => {
-  // available fields to change
-  let { email, username, password, image, bio } = req.body.user;
+  let payload = req.body.user;
+  if (!payload) return res.sendStatus(400);
+
+  let { email, username, password, image, bio } = payload;
 
   if (password) {
-    password = await hashPassword(password);
+    password = await hashPassword(payload.password);
   }
 
   const tokenData = readTokenData(res);
@@ -47,7 +49,7 @@ export const updateUser = async (req: Request, res: Response) => {
     data: { email, username, password, image, bio },
     select: USER_SELECT,
   });
-  if (!user) return res.status(400).send("Couldn't update user");
+  if (!user) return res.sendStatus(400);
 
   return res.status(200).send({ user });
 };
