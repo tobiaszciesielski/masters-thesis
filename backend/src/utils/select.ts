@@ -20,3 +20,16 @@ export const DETAILED_USER_SELECT = {
   id: true,
   password: true,
 };
+
+export const ARTICLE_SELECT = {
+  author: {
+    select: USER_SELECT,
+  },
+  _count: {
+    select: {
+      favoritedBy: true,
+    },
+  },
+  tagList: { select: { name: true } },
+  favoritedBy: true,
+};

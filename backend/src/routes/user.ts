@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getCurrentUser, updateUser } from '../controllers/user';
 
-import { optionalAuth, requiredAuth } from '../utils/auth';
+import { requiredAuth } from '../utils/auth';
 
 const userRouter = Router();
 

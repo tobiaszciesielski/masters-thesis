@@ -1,23 +1,16 @@
 import { Request, Response } from 'express';
 import { prisma } from '../../prisma/client';
+import { ArticlePayload } from '../models/article';
 import { readTokenData } from '../utils/auth';
-import { USER_SELECT } from '../utils/select';
-
-interface CreateArticlePayload {
-  article?: {
-    title?: string;
-    description?: string;
-    body?: string;
-    tagList?: string[];
-  };
-}
+import { createArticleSlug } from '../utils/helpers';
+import { ARTICLE_SELECT } from '../utils/select';
 
 export const createArticle = async (
-  req: Request<{}, {}, CreateArticlePayload>,
+  req: Request<any, any, ArticlePayload>,
   res: Response
 ) => {
   const tokenData = readTokenData(res);
-  if (!tokenData) res.sendStatus(403);
+  if (!tokenData) return res.sendStatus(403);
 
   const payload = req.body.article;
   if (!payload || !payload.title || !payload.description || !payload.body)
@@ -25,8 +18,7 @@ export const createArticle = async (
 
   const { body, title, description, tagList } = payload;
 
-  const slug =
-    title.toLocaleLowerCase().replaceAll(' ', '-') + `-${tokenData?.userId}`;
+  const slug = createArticleSlug(title, tokenData.userId);
 
   const existingTitle = await prisma.article.findUnique({
     where: { slug },
@@ -53,24 +45,73 @@ export const createArticle = async (
 
         author: { connect: { id: tokenData?.userId } },
       },
-      include: {
-        author: {
-          select: USER_SELECT,
-        },
-        _count: {
-          select: {
-            favoritedBy: true,
-          },
-        },
-        tagList: { select: { name: true } },
-        favoritedBy: true,
-      },
+      include: ARTICLE_SELECT,
     });
 
   return res.status(200).send({
     article: {
       ...article,
       tagList: article.tagList.map(({ name }) => name),
+      favoritesCount: _count.favoritedBy,
+      favorited: favoritedBy.some((user) => user.id === tokenData?.userId),
+    },
+  });
+};
+
+export const updateArticle = async (
+  req: Request<any, any, ArticlePayload>,
+  res: Response
+) => {
+  const tokenData = readTokenData(res);
+  if (!tokenData) return res.sendStatus(403);
+
+  const payload = req.body.article;
+  if (!payload) return res.sendStatus(400);
+
+  const { body, title, description } = payload;
+
+  const slug = req.params.slug;
+  if (!slug) return res.sendStatus(400);
+
+  const article = await prisma.article.findUnique({
+    where: { slug },
+    select: { id: true },
+  });
+  if (!article) return res.status(400).send('Article not exists');
+
+  let newSlug: string | undefined;
+  if (title) {
+    newSlug = createArticleSlug(title, tokenData.userId);
+
+    const existingTitle = await prisma.article.findMany({
+      where: { NOT: { id: article.id }, AND: { slug: newSlug } },
+      select: { slug: true },
+    });
+
+    if (existingTitle.length) {
+      return res.status(400).send('Title must be unique');
+    }
+  }
+
+  const { tagList, _count, favoritedBy, ...updatedArticle } =
+    await prisma.article.update({
+      where: {
+        id: article.id,
+      },
+      data: {
+        title,
+        description,
+        body,
+        slug: newSlug,
+        updatedAt: new Date(),
+      },
+      include: ARTICLE_SELECT,
+    });
+
+  return res.status(200).send({
+    article: {
+      ...updatedArticle,
+      tagList: tagList.map(({ name }) => name),
       favoritesCount: _count.favoritedBy,
       favorited: favoritedBy.some((user) => user.id === tokenData?.userId),
     },
