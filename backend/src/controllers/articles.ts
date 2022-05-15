@@ -3,7 +3,7 @@ import { prisma } from '../../prisma/client';
 import { ArticlePayload } from '../models/article';
 import { readTokenData } from '../utils/auth';
 import { createArticleSlug } from '../utils/helpers';
-import { ARTICLE_SELECT } from '../utils/select';
+import { ARTICLE_INCLUDE } from '../utils/select';
 
 export const createArticle = async (
   req: Request<any, any, ArticlePayload>,
@@ -45,13 +45,39 @@ export const createArticle = async (
 
         author: { connect: { id: tokenData?.userId } },
       },
-      include: ARTICLE_SELECT,
+      include: ARTICLE_INCLUDE,
     });
 
   return res.status(200).send({
     article: {
       ...article,
       tagList: article.tagList.map(({ name }) => name),
+      favoritesCount: _count.favoritedBy,
+      favorited: favoritedBy.some((user) => user.id === tokenData?.userId),
+    },
+  });
+};
+
+export const getArticle = async (req: Request, res: Response) => {
+  const { slug } = req.params;
+  if (!slug) return res.sendStatus(400);
+
+  const tokenData = readTokenData(res);
+
+  const article = await prisma.article.findUnique({
+    where: { slug },
+    include: ARTICLE_INCLUDE,
+  });
+
+  if (!article) return res.sendStatus(404);
+
+  const { authorId, id, tagList, favoritedBy, _count, ...reducedArticle } =
+    article;
+
+  return res.send({
+    article: {
+      ...reducedArticle,
+      tagList: tagList.map(({ name }) => name),
       favoritesCount: _count.favoritedBy,
       favorited: favoritedBy.some((user) => user.id === tokenData?.userId),
     },
@@ -70,7 +96,7 @@ export const updateArticle = async (
 
   const { body, title, description } = payload;
 
-  const slug = req.params.slug;
+  const { slug } = req.params;
   if (!slug) return res.sendStatus(400);
 
   const article = await prisma.article.findUnique({
@@ -93,7 +119,7 @@ export const updateArticle = async (
     }
   }
 
-  const { tagList, _count, favoritedBy, ...updatedArticle } =
+  const { authorId, id, tagList, _count, favoritedBy, ...updatedArticle } =
     await prisma.article.update({
       where: {
         id: article.id,
@@ -105,7 +131,7 @@ export const updateArticle = async (
         slug: newSlug,
         updatedAt: new Date(),
       },
-      include: ARTICLE_SELECT,
+      include: ARTICLE_INCLUDE,
     });
 
   return res.status(200).send({

@@ -21,7 +21,7 @@ export const DETAILED_USER_SELECT = {
   password: true,
 };
 
-export const ARTICLE_SELECT = {
+export const ARTICLE_INCLUDE = {
   author: {
     select: USER_SELECT,
   },
