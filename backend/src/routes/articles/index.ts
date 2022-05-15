@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   createArticle,
   deleteArticle,
+  favoriteArticle,
   feedArticles,
   getArticle,
   getArticles,
@@ -14,10 +15,14 @@ const articlesRouter = Router();
 
 articlesRouter.use('/:slug/comments', commentsRouter);
 
-articlesRouter.get('/:slug', optionalAuth, getArticle);
+articlesRouter.post('/:slug/favorite', requiredAuth, favoriteArticle);
+
 articlesRouter.put('/:slug', requiredAuth, updateArticle);
 articlesRouter.delete('/:slug', requiredAuth, deleteArticle);
+articlesRouter.get('/:slug', optionalAuth, getArticle);
+
 articlesRouter.get('/feed', requiredAuth, feedArticles);
+
 articlesRouter.post('/', requiredAuth, createArticle);
 articlesRouter.get('/', optionalAuth, getArticles);
 
