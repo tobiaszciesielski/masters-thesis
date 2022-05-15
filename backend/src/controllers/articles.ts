@@ -137,7 +137,6 @@ export const feedArticles = async (
   req: Request<any, any, any, PaginationQuery>,
   res: Response
 ) => {
-  console.log('daw');
   const { query } = req;
 
   const tokenData = readTokenData(res);
