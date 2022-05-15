@@ -1,9 +1,13 @@
 import { Request, Response } from 'express';
 import { prisma } from '../../prisma/client';
-import { ArticlePayload, ArticlesQuery } from '../models/article';
+import {
+  ArticlePayload,
+  ArticlesQuery,
+  PaginationQuery,
+} from '../models/article';
 import { readTokenData } from '../utils/auth';
 import { createArticleSlug } from '../utils/helpers';
-import { ARTICLE_INCLUDE, USER_SELECT } from '../utils/select';
+import { ARTICLE_INCLUDE } from '../utils/select';
 
 export const createArticle = async (
   req: Request<any, any, ArticlePayload>,
@@ -110,8 +114,54 @@ export const getArticles = async (
 
   const articles = await prisma.article.findMany({
     where: filterQuery,
-    skip: +(query.offset || 0),
-    take: +(query.limit || 20),
+    skip: Number(query.offset) || 0,
+    take: Number(query.limit) || 20,
+    orderBy: { createdAt: 'desc' },
+    include: ARTICLE_INCLUDE,
+  });
+
+  res.status(200).send({
+    articles: articles.map(
+      ({ authorId, id, tagList, _count, favoritedBy, ...article }) => ({
+        ...article,
+        tagList: tagList.map(({ name }) => name),
+        favoritesCount: _count.favoritedBy,
+        favorited: favoritedBy.some((user) => user.id === tokenData?.userId),
+      })
+    ),
+    articlesCount,
+  });
+};
+
+export const feedArticles = async (
+  req: Request<any, any, any, PaginationQuery>,
+  res: Response
+) => {
+  console.log('daw');
+  const { query } = req;
+
+  const tokenData = readTokenData(res);
+
+  // {
+  //   tagList: query.tag ? { some: { name: { equals: query.tag } } } : {},
+  //   author: query.author ? { username: { equals: query.author } } : {},
+  //   favoritedBy: query.favorited
+  //     ? { some: { username: { equals: query.favorited } } }
+  //     : {},
+  // },
+
+  const articlesCount = await prisma.article.count({
+    where: {
+      favoritedBy: { some: { id: tokenData?.userId } },
+    },
+  });
+
+  const articles = await prisma.article.findMany({
+    where: {
+      favoritedBy: { some: { id: tokenData?.userId } },
+    },
+    skip: Number(query.offset) || 0,
+    take: Number(query.limit) || 20,
     orderBy: { createdAt: 'desc' },
     include: ARTICLE_INCLUDE,
   });

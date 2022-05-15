@@ -39,6 +39,7 @@ export const requiredAuth = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log(req);
   const tokenData = await verifyToken(req.headers);
   if (!tokenData) return res.status(403).send('Forbidden');
 

@@ -7,10 +7,13 @@ export interface ArticlePayload {
   };
 }
 
-export interface ArticlesQuery {
-  offset?: string;
-  limit?: string;
+export interface ArticlesQuery extends PaginationQuery {
   tag?: string;
   favorited?: string;
   author?: string;
+}
+
+export interface PaginationQuery {
+  offset?: string;
+  limit?: string;
 }
