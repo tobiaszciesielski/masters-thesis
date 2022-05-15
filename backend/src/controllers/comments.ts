@@ -44,3 +44,46 @@ export const addComment = async (req: Request, res: Response) => {
     },
   });
 };
+
+export const getComments = async (req: Request, res: Response) => {
+  const tokenData = readTokenData(res);
+
+  const { slug } = req.params;
+
+  if (!slug) return res.sendStatus(400);
+
+  const article = await prisma.article.findUnique({
+    where: { slug },
+    include: {
+      comments: {
+        include: {
+          author: {
+            select: {
+              username: true,
+              bio: true,
+              image: true,
+              followedBy: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  if (!article) return res.status(404).send('Article not found');
+
+  const comments = article.comments.map(
+    ({
+      articleId,
+      authorId,
+      author: { followedBy, ...reducedAuthor },
+      ...comment
+    }) => ({
+      ...comment,
+      author: {
+        ...reducedAuthor,
+        following: followedBy.some(({ id }) => id === tokenData?.userId),
+      },
+    })
+  );
+  res.status(200).send({ comments });
+};
