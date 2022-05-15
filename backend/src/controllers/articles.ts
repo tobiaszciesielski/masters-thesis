@@ -143,3 +143,22 @@ export const updateArticle = async (
     },
   });
 };
+
+export const deleteArticle = async (req: Request, res: Response) => {
+  const { slug } = req.params;
+  if (!slug) return res.sendStatus(400);
+
+  const articleToDelete = await prisma.article.findUnique({
+    where: { slug },
+    select: { id: true },
+  });
+
+  if (!articleToDelete) return res.sendStatus(404);
+
+  await prisma.article.delete({
+    where: { id: articleToDelete?.id },
+    select: { id: true },
+  });
+
+  return res.sendStatus(200);
+};
