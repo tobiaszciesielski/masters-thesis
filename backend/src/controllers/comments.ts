@@ -45,11 +45,10 @@ export const addComment = async (req: Request, res: Response) => {
   });
 };
 
-export const getComments = async (req: Request, res: Response) => {
+export const getAllArticleComments = async (req: Request, res: Response) => {
   const tokenData = readTokenData(res);
 
   const { slug } = req.params;
-
   if (!slug) return res.sendStatus(400);
 
   const article = await prisma.article.findUnique({
@@ -86,4 +85,30 @@ export const getComments = async (req: Request, res: Response) => {
     })
   );
   res.status(200).send({ comments });
+};
+
+export const deleteComment = async (req: Request, res: Response) => {
+  const tokenData = readTokenData(res);
+  if (!tokenData) return res.sendStatus(403);
+
+  const { slug, id } = req.params;
+  if (!slug || !id) return res.sendStatus(400);
+
+  const commentToDelete = await prisma.comment.findFirst({
+    where: {
+      id: +id,
+      author: {
+        id: tokenData.userId,
+      },
+    },
+  });
+  if (!commentToDelete) return res.status(404).send('Cannot delete comment');
+
+  await prisma.comment.delete({
+    where: {
+      id: +id,
+    },
+  });
+
+  res.sendStatus(200);
 };
