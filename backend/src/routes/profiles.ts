@@ -4,8 +4,8 @@ import { optionalAuth, requiredAuth } from '../utils/auth';
 
 const profilesRouter = Router();
 
-profilesRouter.get('/:username', optionalAuth, getProfile);
-profilesRouter.post('/:username/follow', requiredAuth, follow);
 profilesRouter.delete('/:username/follow', requiredAuth, unfollow);
+profilesRouter.post('/:username/follow', requiredAuth, follow);
+profilesRouter.get('/:username', optionalAuth, getProfile);
 
 export { profilesRouter };
