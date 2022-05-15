@@ -261,8 +261,6 @@ export const favoriteArticle = async (req: Request, res: Response) => {
   const { slug } = req.params;
   if (!slug) return res.sendStatus(400);
 
-  console.log(slug);
-
   const tokenData = readTokenData(res);
   if (!tokenData) return res.sendStatus(403);
 
@@ -276,6 +274,36 @@ export const favoriteArticle = async (req: Request, res: Response) => {
     await prisma.article.update({
       where: { id: article.id },
       data: { favoritedBy: { connect: { id: tokenData.userId } } },
+      include: ARTICLE_INCLUDE,
+    });
+
+  return res.send({
+    article: {
+      ...favoritedArticle,
+      tagList: tagList.map(({ name }) => name),
+      favoritesCount: _count.favoritedBy,
+      favorited: favoritedBy.some((user) => user.id === tokenData?.userId),
+    },
+  });
+};
+
+export const unfavoriteArticle = async (req: Request, res: Response) => {
+  const { slug } = req.params;
+  if (!slug) return res.sendStatus(400);
+
+  const tokenData = readTokenData(res);
+  if (!tokenData) return res.sendStatus(403);
+
+  const article = await prisma.article.findUnique({
+    where: { slug },
+    select: { id: true },
+  });
+  if (!article) return res.status(400).send('Article not exists');
+
+  const { authorId, id, tagList, favoritedBy, _count, ...favoritedArticle } =
+    await prisma.article.update({
+      where: { id: article.id },
+      data: { favoritedBy: { disconnect: { id: tokenData.userId } } },
       include: ARTICLE_INCLUDE,
     });
 

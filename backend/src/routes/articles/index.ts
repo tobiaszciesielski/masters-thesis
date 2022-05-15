@@ -6,6 +6,7 @@ import {
   feedArticles,
   getArticle,
   getArticles,
+  unfavoriteArticle,
   updateArticle,
 } from '../../controllers/articles';
 import { optionalAuth, requiredAuth } from '../../utils/auth';
@@ -16,6 +17,7 @@ const articlesRouter = Router();
 articlesRouter.use('/:slug/comments', commentsRouter);
 
 articlesRouter.post('/:slug/favorite', requiredAuth, favoriteArticle);
+articlesRouter.delete('/:slug/favorite', requiredAuth, unfavoriteArticle);
 
 articlesRouter.put('/:slug', requiredAuth, updateArticle);
 articlesRouter.delete('/:slug', requiredAuth, deleteArticle);
