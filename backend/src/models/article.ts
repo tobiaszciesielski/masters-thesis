@@ -6,3 +6,11 @@ export interface ArticlePayload {
     tagList?: string[];
   };
 }
+
+export interface ArticlesQuery {
+  offset?: string;
+  limit?: string;
+  tag?: string;
+  favorited?: string;
+  author?: string;
+}

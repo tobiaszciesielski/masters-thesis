@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { prisma } from '../../prisma/client';
-import { ArticlePayload } from '../models/article';
+import { ArticlePayload, ArticlesQuery } from '../models/article';
 import { readTokenData } from '../utils/auth';
 import { createArticleSlug } from '../utils/helpers';
-import { ARTICLE_INCLUDE } from '../utils/select';
+import { ARTICLE_INCLUDE, USER_SELECT } from '../utils/select';
 
 export const createArticle = async (
   req: Request<any, any, ArticlePayload>,
@@ -81,6 +81,51 @@ export const getArticle = async (req: Request, res: Response) => {
       favoritesCount: _count.favoritedBy,
       favorited: favoritedBy.some((user) => user.id === tokenData?.userId),
     },
+  });
+};
+
+export const getArticles = async (
+  req: Request<any, any, any, ArticlesQuery>,
+  res: Response
+) => {
+  const { query } = req;
+
+  const tokenData = readTokenData(res);
+
+  const filterQuery = {
+    AND: [
+      {
+        tagList: query.tag ? { some: { name: { equals: query.tag } } } : {},
+        author: query.author ? { username: { equals: query.author } } : {},
+        favoritedBy: query.favorited
+          ? { some: { username: { equals: query.favorited } } }
+          : {},
+      },
+    ],
+  };
+
+  const articlesCount = await prisma.article.count({
+    where: filterQuery,
+  });
+
+  const articles = await prisma.article.findMany({
+    where: filterQuery,
+    skip: +(query.offset || 0),
+    take: +(query.limit || 20),
+    orderBy: { createdAt: 'desc' },
+    include: ARTICLE_INCLUDE,
+  });
+
+  res.status(200).send({
+    articles: articles.map(
+      ({ authorId, id, tagList, _count, favoritedBy, ...article }) => ({
+        ...article,
+        tagList: tagList.map(({ name }) => name),
+        favoritesCount: _count.favoritedBy,
+        favorited: favoritedBy.some((user) => user.id === tokenData?.userId),
+      })
+    ),
+    articlesCount,
   });
 };
 
