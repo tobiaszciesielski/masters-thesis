@@ -7,3 +7,5 @@ if (!process.env.TOKEN_SECRET) {
 }
 
 export const { TOKEN_SECRET } = process.env;
+
+export const PORT = 4000;

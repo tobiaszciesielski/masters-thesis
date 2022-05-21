@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { TokenData } from '../models/auth';
 import bcrypt from 'bcrypt';
 import { IncomingHttpHeaders } from 'http';
-import { TOKEN_SECRET } from './config';
+import { TOKEN_SECRET } from '../../config';
 
 export const verifyToken = (
   headers: IncomingHttpHeaders
