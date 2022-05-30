@@ -1,8 +1,8 @@
-import { redirect } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import type { ActionFunction } from '@remix-run/node';
-import API_BASE from '~/services/api';
+import API_BASE, { makeRequest } from '~/services/api';
 import type { User } from '~/models/User';
-import { commitSession, getSession } from '~/session';
+import { createSessionCookie } from '~/lib/session-utils';
 
 interface LoginData {
   username?: string;
@@ -13,18 +13,13 @@ export const action: ActionFunction = async ({ request }) => {
   let formData = await request.formData();
   const values = Object.fromEntries(formData) as LoginData;
 
-  const data = await fetch(`${API_BASE}/users/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ user: values }),
-  }).then((res) => res.json());
+  const response = await makeRequest('/users/login', 'POST', { user: values });
+  if (response.status !== 200) {
+    return json({ error: 'Please try again' });
+  }
 
-  const user = data?.user as User;
-
-  const session = await getSession(request.headers.get('Cookie'));
-  session.set('auth_token', user.token);
-
-  const cookie = await commitSession(session);
+  const { user }: { user: User } = await response.json();
+  const cookie = await createSessionCookie(request, user.token);
   return redirect('/', {
     headers: {
       'Set-Cookie': cookie,

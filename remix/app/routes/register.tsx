@@ -1,8 +1,9 @@
-import { json, LoaderFunction, redirect } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
+import type { LoaderFunction } from '@remix-run/node';
 import type { ActionFunction } from '@remix-run/node';
-import API_BASE from '~/services/api';
+import { makeRequest } from '~/services/api';
+import { createSessionCookie, requireUserSession } from '~/lib/session-utils';
 import type { User } from '~/models/User';
-import { commitSession, getSession } from '~/session';
 
 interface RegisterData {
   username?: string;
@@ -11,32 +12,25 @@ interface RegisterData {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const session = await getSession(request.headers.get('Cookie'));
+  const user = await requireUserSession(request);
 
-  console.log(session.get('auth_token'));
-  return json({});
+  return json(user);
 };
 
 export const action: ActionFunction = async ({ request }) => {
   let formData = await request.formData();
   const values = Object.fromEntries(formData) as RegisterData;
-  console.log(values);
 
-  const data = await fetch(`${API_BASE}/users`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ user: values }),
-  }).then((res) => res.json());
+  const response = await makeRequest('/users', 'POST', { user: values });
+  if (response.status !== 200) {
+    return json({ error: 'Please try again' });
+  }
 
-  const user = data?.user as User;
-
-  const session = await getSession(request.headers.get('Cookie'));
-  session.set('auth_token', user.token);
-  console.log(session.get('auth_token'));
-
+  const { user }: { user: User } = await response.json();
+  const cookie = await createSessionCookie(request, user.token);
   return redirect('/', {
     headers: {
-      'Set-Cookie': await commitSession(session),
+      'Set-Cookie': cookie,
     },
   });
 };
