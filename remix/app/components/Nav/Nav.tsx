@@ -1,35 +1,66 @@
+import { NavLink } from '@remix-run/react';
+
+const defaultClass = 'nav-link';
+const activeClass = `${defaultClass} active`;
+
 export default function Nav() {
   return (
     <nav className="navbar navbar-light">
       <div className="container">
-        <a className="navbar-brand" href="index.html">
+        <NavLink className="navbar-brand" to="/">
           conduit
-        </a>
+        </NavLink>
+
         <ul className="nav navbar-nav pull-xs-right">
           <li className="nav-item">
-            <a className="nav-link active" href="">
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? activeClass : defaultClass
+              }
+              to="/"
+            >
               Home
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="">
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? activeClass : defaultClass
+              }
+              to="/"
+            >
               <i className="ion-compose"></i>&nbsp;New Article
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="">
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? activeClass : defaultClass
+              }
+              to="/"
+            >
               <i className="ion-gear-a"></i>&nbsp;Settings
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="">
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? activeClass : defaultClass
+              }
+              to="/login"
+            >
               Sign in
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="">
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? activeClass : defaultClass
+              }
+              to="/register"
+            >
               Sign up
-            </a>
+            </NavLink>
           </li>
         </ul>
       </div>
