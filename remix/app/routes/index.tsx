@@ -3,14 +3,16 @@ import type { LoaderFunction } from '@remix-run/node';
 
 import { useLoaderData } from '@remix-run/react';
 import API_BASE from '~/services/api';
+import { getUser } from '~/lib/session-utils';
 
-export const loader: LoaderFunction = async () => {
-  const [{ articles }, { tags }] = await Promise.all([
+export const loader: LoaderFunction = async ({ request }) => {
+  const [{ articles }, { tags }, user] = await Promise.all([
     fetch(`${API_BASE}/articles`).then((res) => res.json()),
     fetch(`${API_BASE}/tags`).then((res) => res.json()),
+    getUser(request),
   ]);
 
-  return json({ articles, tags });
+  return json({ articles, tags, user });
 };
 
 export default function Index() {

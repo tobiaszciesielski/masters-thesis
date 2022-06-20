@@ -1,12 +1,31 @@
-import type { LinksFunction, MetaFunction } from '@remix-run/node';
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Scripts,
-  ScrollRestoration,
-} from '@remix-run/react';
+import type {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
+
+import Document from './components/Document/Document';
 import Layout from './components/Layout/Layout';
+import { UserProvider } from './context/user';
+import { getUser } from './lib/session-utils';
+
+export default function App() {
+  const user = useLoaderData();
+
+  return (
+    <Document>
+      <UserProvider user={user}>
+        <Layout />
+      </UserProvider>
+    </Document>
+  );
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const user = await getUser(request);
+  return user;
+};
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -33,20 +52,3 @@ export const links: LinksFunction = () => [
     href: '//demo.productionready.io/main.css',
   },
 ];
-
-export default function App() {
-  return (
-    <html lang="en">
-      <head>
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <Layout />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </body>
-    </html>
-  );
-}

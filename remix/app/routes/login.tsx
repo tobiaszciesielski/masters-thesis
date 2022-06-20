@@ -1,6 +1,6 @@
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunction } from '@remix-run/node';
-import API_BASE, { makeRequest } from '~/services/api';
+import { makeRequest } from '~/services/api';
 import type { User } from '~/models/User';
 import { createSessionCookie } from '~/lib/session-utils';
 
