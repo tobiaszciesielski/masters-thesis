@@ -20,8 +20,7 @@ export async function requireUserSession(
   const token = session.get(AUTH_TOKEN_KEY) as string;
 
   if (!session.has(AUTH_TOKEN_KEY)) {
-    redirect('/login');
-    return null;
+    throw redirect('/login');
   }
 
   return getUserWithToken(token);

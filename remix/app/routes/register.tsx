@@ -1,21 +1,15 @@
 import { json, redirect } from '@remix-run/node';
-import type { LoaderFunction } from '@remix-run/node';
 import type { ActionFunction } from '@remix-run/node';
 import { makeRequest } from '~/services/api';
-import { createSessionCookie, requireUserSession } from '~/lib/session-utils';
+import { createSessionCookie } from '~/lib/session-utils';
 import type { User } from '~/models/User';
+import { NavLink } from '@remix-run/react';
 
 interface RegisterData {
   username?: string;
   password?: string;
   email?: string;
 }
-
-export const loader: LoaderFunction = async ({ request }) => {
-  const user = await requireUserSession(request);
-
-  return json(user);
-};
 
 export const action: ActionFunction = async ({ request }) => {
   let formData = await request.formData();
@@ -43,12 +37,12 @@ export default function Register() {
           <div className="col-md-6 offset-md-3 col-xs-12">
             <h1 className="text-xs-center">Sign up</h1>
             <p className="text-xs-center">
-              <a href="/login">Have an account?</a>
+              <NavLink to="/login">Have an account?</NavLink>
             </p>
 
-            <ul className="error-messages">
+            {/* <ul className="error-messages">
               <li>That email is already taken</li>
-            </ul>
+            </ul> */}
 
             <form method="post">
               <fieldset className="form-group">

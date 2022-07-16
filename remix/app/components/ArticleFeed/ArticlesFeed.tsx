@@ -29,7 +29,7 @@ export const ArticlesFeed = ({ articles }: ArticleFeedProps) => {
               <p>{article.description}</p>
               <span>Read more...</span>
 
-              {article.tagList.length && (
+              {!!article.tagList.length && (
                 <ul className="tag-list">
                   {article.tagList.map((tag: string, i: number) => (
                     <li

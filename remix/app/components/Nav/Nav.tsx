@@ -33,7 +33,7 @@ export default function Nav() {
                   className={({ isActive }) =>
                     isActive ? activeClass : defaultClass
                   }
-                  to="/"
+                  to="/editor"
                 >
                   <i className="ion-compose"></i>&nbsp;New Article
                 </NavLink>
@@ -43,7 +43,7 @@ export default function Nav() {
                   className={({ isActive }) =>
                     isActive ? activeClass : defaultClass
                   }
-                  to="/"
+                  to="/settings"
                 >
                   <i className="ion-gear-a"></i>&nbsp;Settings
                 </NavLink>
@@ -54,7 +54,7 @@ export default function Nav() {
                   className={({ isActive }) =>
                     isActive ? activeClass : defaultClass
                   }
-                  to="/"
+                  to={`/profile/${user.username}`}
                 >
                   {user.username}
                 </NavLink>
