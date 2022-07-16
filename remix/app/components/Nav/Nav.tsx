@@ -26,7 +26,7 @@ export default function Nav() {
             </NavLink>
           </li>
 
-          {!!user ? (
+          {user ? (
             <>
               <li className="nav-item">
                 <NavLink
