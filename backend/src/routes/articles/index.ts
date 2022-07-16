@@ -14,6 +14,8 @@ import { commentsRouter } from './comments';
 
 const articlesRouter = Router();
 
+articlesRouter.get('/feed', requiredAuth, feedArticles);
+
 articlesRouter.use('/:slug/comments', commentsRouter);
 
 articlesRouter.post('/:slug/favorite', requiredAuth, favoriteArticle);
@@ -22,8 +24,6 @@ articlesRouter.delete('/:slug/favorite', requiredAuth, unfavoriteArticle);
 articlesRouter.put('/:slug', requiredAuth, updateArticle);
 articlesRouter.delete('/:slug', requiredAuth, deleteArticle);
 articlesRouter.get('/:slug', optionalAuth, getArticle);
-
-articlesRouter.get('/feed', requiredAuth, feedArticles);
 
 articlesRouter.post('/', requiredAuth, createArticle);
 articlesRouter.get('/', optionalAuth, getArticles);
