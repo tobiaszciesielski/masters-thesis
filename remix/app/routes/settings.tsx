@@ -7,6 +7,14 @@ import { requireUserSession } from '~/lib/session-utils';
 import type { User } from '~/models/User';
 import { makeRequest } from '~/services/api';
 
+interface UserData {
+  email?: string;
+  username?: string;
+  bio?: string;
+  image?: string;
+  password?: string;
+}
+
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUserSession(request);
 
@@ -15,7 +23,11 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
-  const values = Object.fromEntries(formData);
+  let values = Object.fromEntries(formData) as UserData;
+
+  if (!values.password) {
+    delete values['password'];
+  }
 
   const authUser = await requireUserSession(request);
 
@@ -31,7 +43,6 @@ export const action: ActionFunction = async ({ request }) => {
 
   const { user } = await response.json();
 
-  // TODO Redirect to user profile
   return redirect(`/profile/${user?.username}`);
 };
 

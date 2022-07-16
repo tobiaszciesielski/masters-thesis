@@ -1,3 +1,4 @@
+import { NavLink } from '@remix-run/react';
 import type { Article } from '~/models/Article';
 
 interface ArticleFeedProps {
@@ -15,9 +16,12 @@ export const ArticlesFeed = ({ articles }: ArticleFeedProps) => {
                 <img src={article.author.image} alt="" />
               </a>
               <div className="info">
-                <a href="" className="author">
+                <NavLink
+                  to={`/profile/${article.author.username}`}
+                  className="author"
+                >
                   {article.author.username}
-                </a>
+                </NavLink>
                 <span className="date">{article.createdAt}</span>
               </div>
               <button className="btn btn-outline-primary btn-sm pull-xs-right">
