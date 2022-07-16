@@ -41,8 +41,6 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Editor() {
-  const data = useActionData();
-  console.log(data);
   return (
     <div className="editor-page">
       <div className="container page">
