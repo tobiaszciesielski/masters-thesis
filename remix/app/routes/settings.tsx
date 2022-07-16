@@ -1,9 +1,11 @@
+import { redirect } from '@remix-run/node';
 import type { ActionFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, useTransition } from '@remix-run/react';
 
-import { getUser, requireUserSession } from '~/lib/session-utils';
+import { requireUserSession } from '~/lib/session-utils';
 import type { User } from '~/models/User';
+import { makeRequest } from '~/services/api';
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUserSession(request);
@@ -12,13 +14,30 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const user = await getUser(request);
+  const formData = await request.formData();
+  const values = Object.fromEntries(formData);
 
-  return json(user);
+  const authUser = await requireUserSession(request);
+
+  const response = await makeRequest(
+    '/user',
+    'PUT',
+    { user: values },
+    authUser?.token
+  );
+  if (response.status !== 200) {
+    return json({ error: 'Please try again' });
+  }
+
+  const { user } = await response.json();
+
+  // TODO Redirect to user profile
+  return redirect(`/profile/${user?.username}`);
 };
 
 export default function Settings() {
   const user = useLoaderData<User>();
+  const transition = useTransition();
 
   return (
     <div className="settings-page">
@@ -27,9 +46,12 @@ export default function Settings() {
           <div className="col-md-6 offset-md-3 col-xs-12">
             <h1 className="text-xs-center">Your Settings</h1>
 
-            <form>
+            <form method="post">
               <fieldset>
-                <fieldset className="form-group">
+                <fieldset
+                  className="form-group"
+                  disabled={transition.state === 'submitting'}
+                >
                   <input
                     defaultValue={user.image}
                     name="image"
@@ -38,7 +60,10 @@ export default function Settings() {
                     placeholder="URL of profile picture"
                   />
                 </fieldset>
-                <fieldset className="form-group">
+                <fieldset
+                  className="form-group"
+                  disabled={transition.state === 'submitting'}
+                >
                   <input
                     defaultValue={user.username}
                     name="username"
@@ -47,7 +72,10 @@ export default function Settings() {
                     placeholder="Your Name"
                   />
                 </fieldset>
-                <fieldset className="form-group">
+                <fieldset
+                  className="form-group"
+                  disabled={transition.state === 'submitting'}
+                >
                   <textarea
                     defaultValue={user.bio}
                     name="bio"
@@ -56,7 +84,10 @@ export default function Settings() {
                     placeholder="Short bio about you"
                   ></textarea>
                 </fieldset>
-                <fieldset className="form-group">
+                <fieldset
+                  className="form-group"
+                  disabled={transition.state === 'submitting'}
+                >
                   <input
                     defaultValue={user.email}
                     name="email"
@@ -65,7 +96,10 @@ export default function Settings() {
                     placeholder="Email"
                   />
                 </fieldset>
-                <fieldset className="form-group">
+                <fieldset
+                  className="form-group"
+                  disabled={transition.state === 'submitting'}
+                >
                   <input
                     name="password"
                     className="form-control form-control-lg"
@@ -73,7 +107,10 @@ export default function Settings() {
                     placeholder="Password"
                   />
                 </fieldset>
-                <button className="btn btn-lg btn-primary pull-xs-right">
+                <button
+                  disabled={transition.state === 'submitting'}
+                  className="btn btn-lg btn-primary pull-xs-right"
+                >
                   Update Settings
                 </button>
               </fieldset>
