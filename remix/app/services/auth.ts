@@ -9,5 +9,5 @@ export const getUserWithToken = async (token: string): Promise<User | null> => {
 
   const { user } = await response.json();
 
-  return { token, ...user };
+  return { ...user, token };
 };

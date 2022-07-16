@@ -2,7 +2,6 @@ import { json, redirect } from '@remix-run/node';
 import type { LoaderFunction, ActionFunction } from '@remix-run/node';
 import { makeRequest } from '~/services/api';
 import { requireUserSession } from '~/lib/session-utils';
-import { useActionData } from '@remix-run/react';
 
 interface ArticleData {
   title?: string;
@@ -10,6 +9,7 @@ interface ArticleData {
   description?: string;
   tagList?: string[];
 }
+
 export const loader: LoaderFunction = async ({ request }) => {
   await requireUserSession(request);
   return json({});
