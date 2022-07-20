@@ -148,17 +148,14 @@ export const feedArticles = async (
   //     ? { some: { username: { equals: query.favorited } } }
   //     : {},
   // },
+  const where = {
+    author: { followedBy: { some: { id: tokenData?.userId } } },
+  };
 
-  const articlesCount = await prisma.article.count({
-    where: {
-      favoritedBy: { some: { id: tokenData?.userId } },
-    },
-  });
+  const articlesCount = await prisma.article.count({ where });
 
   const articles = await prisma.article.findMany({
-    where: {
-      favoritedBy: { some: { id: tokenData?.userId } },
-    },
+    where,
     skip: Number(query.offset) || 0,
     take: Number(query.limit) || 20,
     orderBy: { createdAt: 'desc' },

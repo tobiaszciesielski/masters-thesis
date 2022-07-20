@@ -5,7 +5,7 @@ import { PROFILE_SELECT } from '../utils/select';
 
 export const getProfile = async (req: Request, res: Response) => {
   const { username } = req.params;
-  if (!username) res.sendStatus(400);
+  if (!username) return res.sendStatus(400);
 
   const profile = await prisma.user.findUnique({
     where: { username },
@@ -37,7 +37,7 @@ export const getProfile = async (req: Request, res: Response) => {
 
 export const follow = async (req: Request, res: Response) => {
   const { username } = req.params;
-  if (!username) res.sendStatus(400);
+  if (!username) return res.sendStatus(400);
 
   const userToFollow = await prisma.user.findUnique({
     where: { username },
@@ -65,7 +65,7 @@ export const follow = async (req: Request, res: Response) => {
 export const unfollow = async (req: Request, res: Response) => {
   const { username } = req.params;
 
-  if (!username) res.sendStatus(400);
+  if (!username) return res.sendStatus(400);
 
   const userToUnfollow = await prisma.user.findUnique({
     where: { username },
