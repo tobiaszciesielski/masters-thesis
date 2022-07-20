@@ -37,7 +37,7 @@ export default function FeedLayout() {
 
               <div className="tag-list">
                 {tags.map((tag: string, i: number) => (
-                  <a key={i} href="" className="tag-pill tag-default">
+                  <a key={i} className="tag-pill tag-default">
                     {tag}
                   </a>
                 ))}

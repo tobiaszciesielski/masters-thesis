@@ -2,19 +2,21 @@ import { json } from '@remix-run/node';
 import type { LoaderFunction } from '@remix-run/node';
 
 import { useLoaderData } from '@remix-run/react';
-import API_BASE from '~/services/api';
+import { makeRequest } from '~/services/api';
 import { ArticlesFeed } from '~/components/ArticleFeed/ArticlesFeed';
 import type { ArticlesResponse } from '~/models/Article';
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ params }) => {
+  const { username } = params;
+
   return json(
-    await fetch(`${API_BASE}/articles?limit=20&offset=0`).then((res) =>
+    await makeRequest(`/articles?author=${username}`, 'GET', {}).then((res) =>
       res.json()
     )
   );
 };
 
-export default function GlobalFeed() {
+export default function UserArticles() {
   const { articles } = useLoaderData<ArticlesResponse>();
 
   return <ArticlesFeed articles={articles} />;

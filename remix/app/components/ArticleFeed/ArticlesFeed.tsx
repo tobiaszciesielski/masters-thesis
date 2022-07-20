@@ -17,7 +17,7 @@ export const ArticlesFeed = ({ articles }: ArticleFeedProps) => {
               </a>
               <div className="info">
                 <NavLink
-                  to={`/profile/${article.author.username}`}
+                  to={`profile/${article.author.username}`}
                   className="author"
                 >
                   {article.author.username}
@@ -28,6 +28,7 @@ export const ArticlesFeed = ({ articles }: ArticleFeedProps) => {
                 <i className="ion-heart"></i> {article.favoritesCount}
               </button>
             </div>
+
             <a href="" className="preview-link">
               <h1>{article.title}</h1>
               <p>{article.description}</p>
