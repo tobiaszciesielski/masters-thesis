@@ -1,7 +1,7 @@
 import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { NavLink, Outlet, useFetcher, useLoaderData } from '@remix-run/react';
-import { useEffect, useState } from 'react';
+import { NavLink, Outlet, useLoaderData } from '@remix-run/react';
+import { useState } from 'react';
 import AuthRequired from '~/components/AuthRequired/AuthRequired';
 import UserArticlesToggle from '~/components/UserArticlesToggle/UserArticlesToggle';
 import { useUser } from '~/context/user';

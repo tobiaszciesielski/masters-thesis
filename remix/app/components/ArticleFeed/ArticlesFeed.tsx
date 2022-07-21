@@ -1,5 +1,6 @@
 import { NavLink } from '@remix-run/react';
 import type { Article } from '~/models/Article';
+import { TagList } from '../TagsList/TagList';
 
 interface ArticleFeedProps {
   articles: Article[];
@@ -12,12 +13,12 @@ export const ArticlesFeed = ({ articles }: ArticleFeedProps) => {
         articles.map((article: Article) => (
           <div key={article.slug} className="article-preview">
             <div className="article-meta">
-              <a href="profile.html">
+              <NavLink to={`/profile/${article.author.username}`}>
                 <img src={article.author.image} alt="" />
-              </a>
+              </NavLink>
               <div className="info">
                 <NavLink
-                  to={`profile/${article.author.username}`}
+                  to={`/profile/${article.author.username}`}
                   className="author"
                 >
                   {article.author.username}
@@ -29,24 +30,13 @@ export const ArticlesFeed = ({ articles }: ArticleFeedProps) => {
               </button>
             </div>
 
-            <a href="" className="preview-link">
+            <NavLink to={`/articles/${article.slug}`} className="preview-link">
               <h1>{article.title}</h1>
               <p>{article.description}</p>
               <span>Read more...</span>
+            </NavLink>
 
-              {!!article.tagList.length && (
-                <ul className="tag-list">
-                  {article.tagList.map((tag: string, i: number) => (
-                    <li
-                      key={i}
-                      className="tag-default tag-pill tag-outline ng-binding ng-scope"
-                    >
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </a>
+            {!!article.tagList.length && <TagList tags={article.tagList} />}
           </div>
         ))
       ) : (
