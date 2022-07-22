@@ -55,6 +55,7 @@ export const getAllArticleComments = async (req: Request, res: Response) => {
     where: { slug },
     include: {
       comments: {
+        orderBy: { createdAt: 'desc' },
         include: {
           author: {
             select: {
