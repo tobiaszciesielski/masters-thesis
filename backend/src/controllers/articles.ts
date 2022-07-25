@@ -93,9 +93,7 @@ export const getArticles = async (
   res: Response
 ) => {
   const { query } = req;
-
   const tokenData = readTokenData(res);
-
   const filterQuery = {
     AND: [
       {
