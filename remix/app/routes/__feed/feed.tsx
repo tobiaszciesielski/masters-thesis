@@ -12,9 +12,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUserSession(request);
 
   const articlesResponse = await makeRequest(
-    '/articles/feed?limit=20&offset=0',
+    '/articles/feed',
     'GET',
-    {},
+    { limit: 20, offset: 0 },
     user?.token
   );
   const articles = await articlesResponse.json();

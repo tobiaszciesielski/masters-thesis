@@ -18,9 +18,15 @@ export const makeRequest = async (
     headers['Authorization'] = `Token ${token}`;
   }
 
-  return fetch(`${API_BASE}${url}`, {
-    method: method,
-    body: method !== 'GET' ? JSON.stringify(body) : undefined,
-    headers,
-  });
+  return fetch(
+    `${API_BASE}${url}${
+      // @ts-ignore
+      method === 'GET' ? '?' + new URLSearchParams(body) : ''
+    }`,
+    {
+      method: method,
+      body: method !== 'GET' ? JSON.stringify(body) : undefined,
+      headers,
+    }
+  );
 };

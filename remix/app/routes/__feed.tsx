@@ -1,9 +1,10 @@
 import { json } from '@remix-run/node';
 import type { LoaderFunction } from '@remix-run/node';
 
-import { Outlet, useLoaderData } from '@remix-run/react';
+import { NavLink, Outlet, useLoaderData } from '@remix-run/react';
 import API_BASE from '~/services/api';
 import FeedToggle from '~/components/FeedToggle/FeedToggle';
+import { useState } from 'react';
 
 export const loader: LoaderFunction = async () => {
   const tags = await fetch(`${API_BASE}/tags`).then((res) => res.json());
@@ -13,6 +14,7 @@ export const loader: LoaderFunction = async () => {
 
 export default function FeedLayout() {
   const { tags } = useLoaderData();
+  const [selectedTag, setSelectedTag] = useState<null | string>(null);
 
   return (
     <div className="home-page">
@@ -26,7 +28,12 @@ export default function FeedLayout() {
       <div className="container page">
         <div className="row">
           <div className="col-md-9">
-            <FeedToggle></FeedToggle>
+            <FeedToggle
+              selectedTag={selectedTag}
+              clearSelectedTag={() => {
+                setSelectedTag(null);
+              }}
+            ></FeedToggle>
 
             <Outlet />
           </div>
@@ -37,9 +44,14 @@ export default function FeedLayout() {
 
               <div className="tag-list">
                 {tags.map((tag: string, i: number) => (
-                  <a key={i} className="tag-pill tag-default">
+                  <NavLink
+                    to={`${tag}`}
+                    key={i}
+                    className="tag-pill tag-default"
+                    onClick={() => setSelectedTag(tag)}
+                  >
                     {tag}
-                  </a>
+                  </NavLink>
                 ))}
               </div>
             </div>
