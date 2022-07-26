@@ -18,15 +18,15 @@ export const makeRequest = async (
     headers['Authorization'] = `Token ${token}`;
   }
 
-  return fetch(
-    `${API_BASE}${url}${
-      // @ts-ignore
-      method === 'GET' ? '?' + new URLSearchParams(body) : ''
-    }`,
-    {
-      method: method,
-      body: method !== 'GET' ? JSON.stringify(body) : undefined,
-      headers,
-    }
-  );
+  const params =
+    method === 'GET' && Object.keys(body).length
+      ? // @ts-ignore
+        '?' + new URLSearchParams(body)
+      : '';
+
+  return fetch(`${API_BASE}${url}${params}`, {
+    method: method,
+    body: method !== 'GET' ? JSON.stringify(body) : undefined,
+    headers,
+  });
 };

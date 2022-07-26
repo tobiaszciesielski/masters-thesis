@@ -1,6 +1,7 @@
 import type { ActionFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { NavLink, useActionData, useLoaderData } from '@remix-run/react';
+import { NavLink, useLoaderData, useParams } from '@remix-run/react';
+import { useState } from 'react';
 import { ArticleMeta } from '~/components/ArticleMeta/ArticleMeta';
 import AuthRequired from '~/components/AuthRequired/AuthRequired';
 import { TagList } from '~/components/TagsList/TagList';
@@ -56,36 +57,55 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 export default function ArticleDetails() {
-  const { article, comments } = useLoaderData<{
+  const articleData = useLoaderData<{
     article: Article;
     comments: Comment[];
   }>();
-  const createdComment = useActionData<Comment>();
-  console.log(createdComment);
+  const [comments, setComments] = useState(articleData.comments);
+  const params = useParams();
 
   const user = useUser();
+
+  const deleteComment = async (commentToDelete: Comment) => {
+    const response = await makeRequest(
+      `/articles/${params.slug}/comments/${commentToDelete.id}`,
+      'DELETE',
+      {},
+      user?.token
+    );
+
+    if (response.status !== 200) {
+      return;
+    }
+
+    setComments(
+      comments.filter((comment) => comment.id !== commentToDelete.id)
+    );
+  };
 
   return (
     <div className="article-page">
       <div className="banner">
         <div className="container">
-          <h1>{article.title}</h1>
+          <h1>{articleData.article.title}</h1>
 
-          <ArticleMeta article={article} />
+          <ArticleMeta article={articleData.article} />
         </div>
       </div>
 
       <div className="container page">
         <div className="row article-content">
-          <div className="col-md-12">{article.body}</div>
+          <div className="col-md-12">{articleData.article.body}</div>
         </div>
 
-        {!!article.tagList.length && <TagList tags={article.tagList} />}
+        {!!articleData.article.tagList.length && (
+          <TagList tags={articleData.article.tagList} />
+        )}
 
         <hr />
 
         <div className="article-actions">
-          <ArticleMeta article={article} />
+          <ArticleMeta article={articleData.article} />
         </div>
 
         <AuthRequired>
@@ -144,6 +164,14 @@ export default function ArticleDetails() {
                         {comment.author.username}
                       </NavLink>
                       <span className="date-posted">{comment.createdAt}</span>
+                      {user?.username === comment.author.username && (
+                        <div className="mod-options">
+                          <i
+                            onClick={() => deleteComment(comment)}
+                            className="ion-trash-a"
+                          ></i>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}

@@ -20,7 +20,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export default function FilteredTag() {
-  const { articles } = useLoaderData<ArticlesResponse>();
+  const articles = useLoaderData<ArticlesResponse>().articles;
 
-  return <ArticlesFeed articles={articles} />;
+  return <ArticlesFeed articlesFeed={articles} />;
 }

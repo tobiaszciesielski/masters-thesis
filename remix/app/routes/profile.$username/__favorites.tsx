@@ -1,7 +1,7 @@
 import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { NavLink, Outlet, useLoaderData } from '@remix-run/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AuthRequired from '~/components/AuthRequired/AuthRequired';
 import UserArticlesToggle from '~/components/UserArticlesToggle/UserArticlesToggle';
 import { useUser } from '~/context/user';
@@ -31,7 +31,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export default function ProfileDetails() {
-  const [profile, setProfile] = useState(useLoaderData<Profile>());
+  const userProfile = useLoaderData<Profile>();
+
+  const [profile, setProfile] = useState(userProfile);
   const user = useUser();
 
   const isMyProfile = profile.username === user?.username;
@@ -59,6 +61,10 @@ export default function ProfileDetails() {
     const unfollowedProfile = await response.json();
     setProfile(unfollowedProfile);
   };
+
+  useEffect(() => {
+    setProfile(userProfile);
+  }, [userProfile]);
 
   return (
     <div className="profile-page">

@@ -1,12 +1,50 @@
-import { NavLink } from '@remix-run/react';
+import { redirect } from '@remix-run/node';
+import { NavLink, useNavigate } from '@remix-run/react';
+import { useEffect, useState } from 'react';
+import { useUser } from '~/context/user';
+
 import type { Article } from '~/models/Article';
+import { addToFavorites, removeFromFavorites } from '~/services/article';
+
 import { TagList } from '../TagsList/TagList';
 
 interface ArticleFeedProps {
-  articles: Article[];
+  articlesFeed: Article[];
 }
 
-export const ArticlesFeed = ({ articles }: ArticleFeedProps) => {
+export const ArticlesFeed = ({ articlesFeed }: ArticleFeedProps) => {
+  const [articles, setArticles] = useState(articlesFeed);
+  const user = useUser();
+  const navigate = useNavigate();
+
+  const toggleLike = async (likedArticle: Article) => {
+    if (!user) {
+      navigate('register');
+    }
+
+    let response;
+    if (likedArticle.favorited) {
+      response = await removeFromFavorites(likedArticle, user);
+    } else {
+      response = await addToFavorites(likedArticle, user);
+    }
+
+    if (response.status !== 200) {
+      return;
+    }
+    const { article: responseArticle } = await response.json();
+
+    setArticles(
+      articles.map((article) =>
+        article.slug === likedArticle.slug ? responseArticle : article
+      )
+    );
+  };
+
+  useEffect(() => {
+    setArticles(articlesFeed);
+  }, [articlesFeed]);
+
   return (
     <>
       {articles?.length ? (
@@ -25,7 +63,13 @@ export const ArticlesFeed = ({ articles }: ArticleFeedProps) => {
                 </NavLink>
                 <span className="date">{article.createdAt}</span>
               </div>
-              <button className="btn btn-outline-primary btn-sm pull-xs-right">
+
+              <button
+                onClick={() => toggleLike(article)}
+                className={`btn btn-sm pull-xs-right ${
+                  article.favorited ? 'btn-primary' : 'btn-outline-primary'
+                }`}
+              >
                 <i className="ion-heart"></i> {article.favoritesCount}
               </button>
             </div>

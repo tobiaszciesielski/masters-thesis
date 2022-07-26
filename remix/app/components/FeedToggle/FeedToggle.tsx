@@ -5,7 +5,7 @@ const defaultClass = 'nav-link';
 const activeClass = `${defaultClass} active`;
 
 interface FeedToggleProps {
-  selectedTag: null | string;
+  selectedTag?: string;
   clearSelectedTag: () => void;
 }
 

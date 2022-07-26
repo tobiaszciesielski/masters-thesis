@@ -76,7 +76,7 @@ export default function Settings() {
                   disabled={transition.state === 'submitting'}
                 >
                   <input
-                    defaultValue={user.username}
+                    defaultValue={user?.username}
                     name="username"
                     className="form-control form-control-lg"
                     type="text"

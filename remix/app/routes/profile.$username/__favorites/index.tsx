@@ -19,5 +19,5 @@ export const loader: LoaderFunction = async ({ params }) => {
 export default function UserArticles() {
   const { articles } = useLoaderData<ArticlesResponse>();
 
-  return <ArticlesFeed articles={articles} />;
+  return <ArticlesFeed articlesFeed={articles} />;
 }

@@ -25,5 +25,5 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export default function FavoritesArticles() {
   const { articles } = useLoaderData<ArticlesResponse>();
 
-  return <ArticlesFeed articles={articles} />;
+  return <ArticlesFeed articlesFeed={articles} />;
 }

@@ -1,7 +1,7 @@
 import { json } from '@remix-run/node';
 import type { LoaderFunction } from '@remix-run/node';
 
-import { NavLink, Outlet, useLoaderData } from '@remix-run/react';
+import { NavLink, Outlet, useLoaderData, useParams } from '@remix-run/react';
 import API_BASE from '~/services/api';
 import FeedToggle from '~/components/FeedToggle/FeedToggle';
 import { useState } from 'react';
@@ -14,7 +14,8 @@ export const loader: LoaderFunction = async () => {
 
 export default function FeedLayout() {
   const { tags } = useLoaderData();
-  const [selectedTag, setSelectedTag] = useState<null | string>(null);
+  const params = useParams();
+  const [selectedTag, setSelectedTag] = useState(params.tag);
 
   return (
     <div className="home-page">
@@ -31,7 +32,7 @@ export default function FeedLayout() {
             <FeedToggle
               selectedTag={selectedTag}
               clearSelectedTag={() => {
-                setSelectedTag(null);
+                setSelectedTag(undefined);
               }}
             ></FeedToggle>
 

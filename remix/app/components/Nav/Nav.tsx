@@ -54,9 +54,9 @@ export default function Nav() {
                   className={({ isActive }) =>
                     isActive ? activeClass : defaultClass
                   }
-                  to={`/profile/${user.username}`}
+                  to={`/profile/${user?.username}`}
                 >
-                  {user.username}
+                  {user?.username}
                 </NavLink>
               </li>
             </>
