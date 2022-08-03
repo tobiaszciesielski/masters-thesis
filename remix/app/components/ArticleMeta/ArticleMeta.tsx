@@ -1,6 +1,7 @@
-import { NavLink } from '@remix-run/react';
+import { NavLink, useNavigate } from '@remix-run/react';
 import type { Article } from '~/models/Article';
-import { User } from '~/models/User';
+import type { User } from '~/models/User';
+import { makeRequest } from '~/services/api';
 
 export interface ArticleMetaProps {
   article: Article;
@@ -10,6 +11,21 @@ export interface ArticleMetaProps {
 }
 
 export const ArticleMeta = ({ article, user }: ArticleMetaProps) => {
+  const navigate = useNavigate();
+
+  const deleteArticle = async () => {
+    const response = await makeRequest(
+      `/articles/${article.slug}`,
+      'DELETE',
+      {},
+      user?.token
+    );
+
+    if (response.status === 200) {
+      navigate('/');
+    }
+  };
+
   return (
     <div className="article-meta">
       <NavLink to={`/profile/${article.author.username}`}>
@@ -29,7 +45,11 @@ export const ArticleMeta = ({ article, user }: ArticleMetaProps) => {
           >
             <i className="ion-edit"></i> Edit Article
           </NavLink>
-          <button className="btn btn-outline-danger btn-sm">
+          &nbsp;&nbsp;
+          <button
+            onClick={deleteArticle}
+            className="btn btn-outline-danger btn-sm"
+          >
             <i className="ion-trash-a"></i> Delete Article
           </button>
         </>
