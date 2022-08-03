@@ -183,7 +183,7 @@ export const updateArticle = async (
   const payload = req.body.article;
   if (!payload) return res.sendStatus(400);
 
-  const { body, title, description } = payload;
+  const { body, title, description, tagList: tags } = payload;
 
   const { slug } = req.params;
   if (!slug) return res.sendStatus(400);
@@ -219,6 +219,12 @@ export const updateArticle = async (
         body,
         slug: newSlug,
         updatedAt: new Date(),
+        tagList: {
+          connectOrCreate: tags?.map((tag) => ({
+            create: { name: tag },
+            where: { name: tag },
+          })),
+        },
       },
       include: ARTICLE_INCLUDE,
     });
