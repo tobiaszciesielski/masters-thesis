@@ -8,6 +8,7 @@ import { useUser } from '~/context/user';
 import { getUser } from '~/lib/session-utils';
 import type { Profile } from '~/models/Profile';
 import { makeRequest } from '~/services/api';
+import { follow, unfollow } from '~/services/profile';
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const { username } = params;
@@ -38,25 +39,15 @@ export default function ProfileDetails() {
 
   const isMyProfile = profile.username === user?.username;
 
-  const follow = async () => {
-    const response = await makeRequest(
-      `/profiles/${profile.username}/follow`,
-      'POST',
-      {},
-      user?.token
-    );
+  const followProfile = async () => {
+    const response = await follow(user, profile);
 
     const followingProfile = await response.json();
     setProfile(followingProfile);
   };
 
-  const unfollow = async () => {
-    const response = await makeRequest(
-      `/profiles/${profile.username}/follow`,
-      'DELETE',
-      {},
-      user?.token
-    );
+  const unfollowProfile = async () => {
+    const response = await unfollow(user, profile);
 
     const unfollowedProfile = await response.json();
     setProfile(unfollowedProfile);
@@ -87,14 +78,14 @@ export default function ProfileDetails() {
                 ) : profile.following ? (
                   <button
                     className="btn btn-sm btn-outline-secondary action-btn"
-                    onClick={unfollow}
+                    onClick={unfollowProfile}
                   >
                     Unfollow {profile.username}
                   </button>
                 ) : (
                   <button
                     className="btn btn-sm btn-outline-secondary action-btn"
-                    onClick={follow}
+                    onClick={followProfile}
                   >
                     <i className="ion-plus-round"></i>
                     &nbsp; Follow {profile.username}

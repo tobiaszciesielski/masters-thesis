@@ -89,7 +89,7 @@ export default function ArticleDetails() {
         <div className="container">
           <h1>{articleData.article.title}</h1>
 
-          <ArticleMeta article={articleData.article} />
+          <ArticleMeta user={user} article={articleData.article} />
         </div>
       </div>
 
@@ -105,7 +105,7 @@ export default function ArticleDetails() {
         <hr />
 
         <div className="article-actions">
-          <ArticleMeta article={articleData.article} />
+          <ArticleMeta user={user} article={articleData.article} />
         </div>
 
         <AuthRequired>

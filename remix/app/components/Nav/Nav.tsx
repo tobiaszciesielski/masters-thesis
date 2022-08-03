@@ -33,7 +33,7 @@ export default function Nav() {
                   className={({ isActive }) =>
                     isActive ? activeClass : defaultClass
                   }
-                  to="/editor"
+                  to="/editor/"
                 >
                   <i className="ion-compose"></i>&nbsp;New Article
                 </NavLink>
