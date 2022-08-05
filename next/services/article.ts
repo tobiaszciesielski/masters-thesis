@@ -1,5 +1,5 @@
-import type { Article } from '~/models/Article';
-import type { User } from '~/models/User';
+import { Article } from '../models/Article';
+import { User } from '../models/User';
 import { makeRequest } from './api';
 
 export const addToFavorites = async (

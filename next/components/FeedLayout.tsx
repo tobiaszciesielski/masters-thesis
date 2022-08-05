@@ -1,14 +1,20 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
+
+import FeedToggle from './FeedToggle';
 
 interface FeedLayoutProps {
   children: React.ReactNode;
+  tags: string[];
 }
 
-export default function FeedLayout({ children }: FeedLayoutProps) {
-  const { tags } = { tags: ['abba', 'bba'] }; // todo
-  const params = { tag: 'undefined' }; // todo
-  const [selectedTag, setSelectedTag] = useState(params.tag);
+export default function FeedLayout({ children, tags }: FeedLayoutProps) {
+  const router = useRouter();
+  const params = router.query;
+  const [selectedTag, setSelectedTag] = useState(
+    params.tag as string | undefined
+  );
 
   return (
     <div className="home-page">
@@ -22,13 +28,12 @@ export default function FeedLayout({ children }: FeedLayoutProps) {
       <div className="container page">
         <div className="row">
           <div className="col-md-9">
-            {/* <FeedToggle
+            <FeedToggle
               selectedTag={selectedTag}
               clearSelectedTag={() => {
                 setSelectedTag(undefined);
               }}
             ></FeedToggle>
-            */}
             {children}
           </div>
 
@@ -38,12 +43,13 @@ export default function FeedLayout({ children }: FeedLayoutProps) {
 
               <div className="tag-list">
                 {tags.map((tag: string, i: number) => (
-                  <Link
-                    href={`${tag}`}
-                    key={i}
-                    onClick={() => setSelectedTag(tag)}
-                  >
-                    <a className="tag-pill tag-default">{tag}</a>
+                  <Link href={`${tag}`} key={i}>
+                    <a
+                      className="tag-pill tag-default"
+                      onClick={() => setSelectedTag(tag)}
+                    >
+                      {tag}
+                    </a>
                   </Link>
                 ))}
               </div>

@@ -7,9 +7,6 @@ export interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  useEffect(() => {
-    console.log('rendered');
-  });
   return (
     <>
       <Nav />

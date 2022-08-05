@@ -1,5 +1,5 @@
-import type { Profile } from '~/models/Profile';
-import type { User } from '~/models/User';
+import { Profile } from '../models/Profile';
+import { User } from '../models/User';
 import { makeRequest } from './api';
 
 export const follow = async (

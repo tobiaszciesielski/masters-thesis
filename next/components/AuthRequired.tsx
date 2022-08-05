@@ -11,4 +11,4 @@ const AuthRequired = ({ children }: AuthRequiredProps) => {
   return user ? <>{children}</> : null;
 };
 
-AuthRequired;
+export default AuthRequired;
