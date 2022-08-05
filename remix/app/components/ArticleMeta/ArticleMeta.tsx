@@ -6,8 +6,6 @@ import { makeRequest } from '~/services/api';
 export interface ArticleMetaProps {
   article: Article;
   user: User | null;
-  onFollow: () => void;
-  onUnfollow: () => void;
 }
 
 export const ArticleMeta = ({ article, user }: ArticleMetaProps) => {
