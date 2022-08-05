@@ -40,10 +40,6 @@ export default function Register() {
               <NavLink to="/login">Have an account?</NavLink>
             </p>
 
-            {/* <ul className="error-messages">
-              <li>That email is already taken</li>
-            </ul> */}
-
             <form method="post">
               <fieldset className="form-group">
                 <input

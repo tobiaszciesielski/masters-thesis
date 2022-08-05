@@ -1,10 +1,12 @@
+import { NavLink } from '@remix-run/react';
+
 export default function Footer() {
   return (
     <footer>
       <div className="container">
-        <a href="/" className="logo-font">
+        <NavLink to="/" className="logo-font">
           conduit
-        </a>
+        </NavLink>
         <span className="attribution">
           An interactive learning project from{' '}
           <a href="https://thinkster.io">Thinkster</a>. Code &amp; design
