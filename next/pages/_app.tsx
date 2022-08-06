@@ -8,6 +8,7 @@ import { getIronSession } from 'iron-session';
 import { sessionOptions } from '../services/session';
 import App from 'next/app';
 import { User } from '../models/User';
+import { getUserWithToken } from '../services/auth';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -33,14 +34,20 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
   const {
     ctx: { res, req },
   } = appContext;
+  if (!req || !res) {
+    return appProps;
+  }
 
-  if (req && res) {
-    const { user } = await getIronSession(req, res, sessionOptions);
+  const { user } = await getIronSession(req, res, sessionOptions);
+  if (!user) {
+    return appProps;
+  }
 
-    console.log(user);
+  const authUser = await getUserWithToken(user?.token);
+  if (authUser) {
     return {
       ...appProps,
-      user,
+      user: authUser,
     };
   }
 

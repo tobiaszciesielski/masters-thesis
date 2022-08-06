@@ -1,7 +1,6 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useUser } from '../context/user';
 
 import { makeRequest } from '../services/api';
 
@@ -22,11 +21,11 @@ const Login: NextPage = () => {
       true
     );
 
-    if (response.status !== 200) {
-      return;
+    if (response.status === 200) {
+      router.push('/');
     }
 
-    router.push('/');
+    return;
   };
 
   return (

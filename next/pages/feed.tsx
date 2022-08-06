@@ -16,6 +16,15 @@ interface FeedProps {
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
   async ({ req, res }) => {
+    if (!req.session.user) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      };
+    }
+
     const response = await getAllTags();
     const { tags } = await response.json();
 

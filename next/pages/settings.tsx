@@ -1,8 +1,9 @@
 import { NextPage } from 'next';
-import { useUser } from '../context/user';
 
 import { withIronSessionSsr } from 'iron-session/next';
 import { sessionOptions } from '../services/session';
+import { makeRequest } from '../services/api';
+import { useRouter } from 'next/router';
 
 interface UserData {
   email?: string;
@@ -33,12 +34,21 @@ export const getServerSideProps = withIronSessionSsr(async function ({
 },
 sessionOptions);
 
-const Settings: NextPage = (props) => {
-  const user = useUser();
+const Settings: NextPage = (props: any) => {
+  const router = useRouter();
 
-  const logout = () => {
-    if()
-  }
+  const logout = async () => {
+    const request = await makeRequest(
+      '/logout',
+      'DELETE',
+      {},
+      props.user?.token,
+      true
+    );
+    if (request.status === 200) {
+      router.push('/');
+    }
+  };
 
   return (
     <div className="settings-page">
@@ -51,7 +61,7 @@ const Settings: NextPage = (props) => {
               <fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={user?.image}
+                    defaultValue={props.user?.image}
                     name="image"
                     className="form-control"
                     type="text"
@@ -60,7 +70,7 @@ const Settings: NextPage = (props) => {
                 </fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={user?.username}
+                    defaultValue={props.user?.username}
                     name="username"
                     className="form-control form-control-lg"
                     type="text"
@@ -69,7 +79,7 @@ const Settings: NextPage = (props) => {
                 </fieldset>
                 <fieldset className="form-group">
                   <textarea
-                    defaultValue={user?.bio}
+                    defaultValue={props.user?.bio}
                     name="bio"
                     className="form-control form-control-lg"
                     rows={8}
@@ -78,7 +88,7 @@ const Settings: NextPage = (props) => {
                 </fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={user?.email}
+                    defaultValue={props.user?.email}
                     name="email"
                     className="form-control form-control-lg"
                     type="text"
@@ -101,11 +111,9 @@ const Settings: NextPage = (props) => {
 
             <hr />
 
-            <form action="/logout" method="post">
-              <button className="btn btn-outline-danger">
-                Or click here to logout.
-              </button>
-            </form>
+            <button onClick={logout} className="btn btn-outline-danger">
+              Or click here to logout.
+            </button>
           </div>
         </div>
       </div>
