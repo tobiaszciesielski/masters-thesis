@@ -8,6 +8,7 @@ import { withIronSessionSsr } from 'iron-session/next';
 import { sessionOptions } from '../services/session';
 import { User } from '../models/User';
 import { ArticlesFeed } from '../components/ArticlesFeed';
+import { getUserFeed } from '../services/articles';
 
 interface FeedProps {
   tags: string[];
@@ -25,11 +26,22 @@ export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
       };
     }
 
-    const response = await getAllTags();
-    const { tags } = await response.json();
+    const [feedsResponse, tagsResponse] = await Promise.all([
+      getUserFeed(req.session.user),
+      getAllTags(),
+    ]);
+
+    const [{ articles }, { tags }] = await Promise.all([
+      feedsResponse.json(),
+      tagsResponse.json(),
+    ]);
 
     return {
-      props: { tags, user: req.session.user },
+      props: {
+        tags,
+        articles,
+        user: req.session.user,
+      },
     };
   },
   sessionOptions

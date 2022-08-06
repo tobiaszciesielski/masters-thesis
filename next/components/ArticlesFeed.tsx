@@ -51,7 +51,12 @@ export const ArticlesFeed = ({ articlesFeed, user }: ArticleFeedProps) => {
           <div key={article.slug} className="article-preview">
             <div className="article-meta">
               <Link href={`/profile/${article.author.username}`} passHref>
-                <Image src={article.author.image} alt="" />
+                <Image
+                  width={32}
+                  height={32}
+                  src={article.author.image}
+                  alt=""
+                />
               </Link>
               <div className="info">
                 <Link href={`/profile/${article.author.username}`}>
