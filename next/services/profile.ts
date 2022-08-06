@@ -2,6 +2,17 @@ import { Profile } from '../models/Profile';
 import { User } from '../models/User';
 import { makeRequest } from './api';
 
+export const getProfile = async (user: User | undefined, username: string) => {
+  const response = await makeRequest(
+    `/profiles/${username}`,
+    'GET',
+    {},
+    user?.token
+  );
+
+  return response;
+};
+
 export const follow = async (
   user: User | null,
   profile: Profile

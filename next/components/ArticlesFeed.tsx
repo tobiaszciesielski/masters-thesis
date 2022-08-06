@@ -50,7 +50,12 @@ export const ArticlesFeed = ({ articlesFeed, user }: ArticleFeedProps) => {
         articles.map((article: Article) => (
           <div key={article.slug} className="article-preview">
             <div className="article-meta">
-              <Link href={`/profile/${article.author.username}`}>
+              <Link
+                href={{
+                  pathname: '/profile/[username]',
+                  query: { username: article.author.username },
+                }}
+              >
                 <a>
                   <Image
                     width={32}
@@ -61,7 +66,12 @@ export const ArticlesFeed = ({ articlesFeed, user }: ArticleFeedProps) => {
                 </a>
               </Link>
               <div className="info">
-                <Link href={`/profile/${article.author.username}`}>
+                <Link
+                  href={{
+                    pathname: '/profile/[username]',
+                    query: { username: article.author.username },
+                  }}
+                >
                   <a className="author">{article.author.username}</a>
                 </Link>
                 <span className="date">{article.createdAt}</span>
