@@ -1,4 +1,3 @@
-import { redirect } from '@remix-run/node';
 import { NavLink, useNavigate } from '@remix-run/react';
 import { useEffect, useState } from 'react';
 import { useUser } from '~/context/user';
