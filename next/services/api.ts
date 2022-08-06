@@ -1,4 +1,5 @@
 const API_BASE = 'http://localhost:4000/api';
+const SSR_SERVER_API_BASE = '/api';
 
 export default API_BASE;
 
@@ -8,7 +9,8 @@ export const makeRequest = async (
   url: string,
   method: Method,
   body: Object,
-  token?: string
+  token?: string,
+  toSSRServer: boolean = false
 ): Promise<Response> => {
   let headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -24,7 +26,9 @@ export const makeRequest = async (
         '?' + new URLSearchParams(body)
       : '';
 
-  return fetch(`${API_BASE}${url}${params}`, {
+  const api = toSSRServer ? SSR_SERVER_API_BASE : API_BASE;
+
+  return fetch(`${api}${url}${params}`, {
     method: method,
     body: method !== 'GET' ? JSON.stringify(body) : undefined,
     headers,

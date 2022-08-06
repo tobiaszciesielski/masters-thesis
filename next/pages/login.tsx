@@ -1,7 +1,34 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useUser } from '../context/user';
+
+import { makeRequest } from '../services/api';
 
 const Login: NextPage = () => {
+  const router = useRouter();
+
+  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const values = Object.fromEntries(formData);
+
+    const response = await makeRequest(
+      '/login',
+      'POST',
+      values,
+      undefined,
+      true
+    );
+
+    if (response.status !== 200) {
+      return;
+    }
+
+    router.push('/');
+  };
+
   return (
     <div className="auth-page">
       <div className="container page">
@@ -14,12 +41,7 @@ const Login: NextPage = () => {
               </Link>
             </p>
 
-            {/*
-            <ul className="error-messages">
-              <li>That email is already taken</li>
-            </ul> */}
-
-            <form method="post">
+            <form onSubmit={submit}>
               <fieldset className="form-group">
                 <input
                   className="form-control form-control-lg"
@@ -36,7 +58,10 @@ const Login: NextPage = () => {
                   placeholder="Password"
                 />
               </fieldset>
-              <button className="btn btn-lg btn-primary pull-xs-right">
+              <button
+                type="submit"
+                className="btn btn-lg btn-primary pull-xs-right"
+              >
                 Sign in
               </button>
             </form>

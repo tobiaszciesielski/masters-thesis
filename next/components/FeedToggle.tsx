@@ -44,7 +44,7 @@ const FeedToggle = ({ selectedTag, clearSelectedTag }: FeedToggleProps) => {
 
         {selectedTag && (
           <li className="nav-item">
-            <Link href={selectedTag}>
+            <Link href={`${selectedTag}`}>
               <a className={activeClass}># {selectedTag}</a>
             </Link>
           </li>

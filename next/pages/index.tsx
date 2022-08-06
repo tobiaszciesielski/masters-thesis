@@ -4,6 +4,9 @@ import FeedLayout from '../components/FeedLayout';
 import { getAllTags } from '../services/tags';
 import { NextPageWithLayout } from './_app';
 
+import { withIronSessionSsr } from 'iron-session/next';
+import { sessionOptions } from '../services/session';
+
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const response = await getAllTags();
   const { tags } = await response.json();

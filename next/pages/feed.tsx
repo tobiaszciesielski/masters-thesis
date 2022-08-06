@@ -4,17 +4,30 @@ import { getAllTags } from '../services/tags';
 
 import { NextPageWithLayout } from './_app';
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const response = await getAllTags();
-  const { tags } = await response.json();
+import { withIronSessionSsr } from 'iron-session/next';
+import { sessionOptions } from '../services/session';
+import { User } from '../models/User';
+import { ArticlesFeed } from '../components/ArticlesFeed';
 
-  return {
-    props: { tags },
-  };
-};
+interface FeedProps {
+  tags: string[];
+  user: User | null;
+}
 
-const Feed: NextPageWithLayout = (props) => {
-  return <div>Feed</div>;
+export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
+  async ({ req, res }) => {
+    const response = await getAllTags();
+    const { tags } = await response.json();
+
+    return {
+      props: { tags, user: req.session.user },
+    };
+  },
+  sessionOptions
+);
+
+const Feed: NextPageWithLayout = (props: any) => {
+  return <ArticlesFeed articlesFeed={props.articles} user={props.user} />;
 };
 
 Feed.getLayout = function getLayout(page) {

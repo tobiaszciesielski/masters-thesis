@@ -1,13 +1,13 @@
-import React, { createContext, useContext } from 'react';
+import { createContext, useContext } from 'react';
 import type { FC } from 'react';
 import { User } from '../models/User';
 
-const UserContext = createContext<User | null>(null);
-
 interface UserProviderProps {
-  user: User | null;
   children: React.ReactNode;
+  user: User | null;
 }
+
+const UserContext = createContext<User | null>(null);
 
 export const UserProvider: FC<UserProviderProps> = ({ children, user }) => (
   <UserContext.Provider value={user}>{children}</UserContext.Provider>

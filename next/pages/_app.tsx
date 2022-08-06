@@ -1,7 +1,13 @@
 import { NextPage } from 'next';
-import type { AppProps } from 'next/app';
+import type { AppContext, AppProps } from 'next/app';
+
 import { ReactElement, ReactNode } from 'react';
 import Layout from '../components/Layout';
+import { UserProvider } from '../context/user';
+import { getIronSession } from 'iron-session';
+import { sessionOptions } from '../services/session';
+import App from 'next/app';
+import { User } from '../models/User';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -9,12 +15,36 @@ export type NextPageWithLayout = NextPage & {
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
+  user: User | null;
 };
 
-function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+function MyApp({ Component, pageProps, user }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
-
-  return <Layout>{getLayout(<Component {...pageProps} />)}</Layout>;
+  return (
+    <UserProvider user={user}>
+      <Layout>{getLayout(<Component {...pageProps} />)}</Layout>;
+    </UserProvider>
+  );
 }
+
+MyApp.getInitialProps = async (appContext: AppContext) => {
+  const appProps: any = await App.getInitialProps(appContext);
+
+  const {
+    ctx: { res, req },
+  } = appContext;
+
+  if (req && res) {
+    const { user } = await getIronSession(req, res, sessionOptions);
+
+    console.log(user);
+    return {
+      ...appProps,
+      user,
+    };
+  }
+
+  return appProps;
+};
 
 export default MyApp;
