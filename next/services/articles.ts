@@ -19,9 +19,7 @@ export const getUserFeed = async (
   return articlesResponse;
 };
 
-export const getGlobalFeed = async (
-  user: User | undefined
-): Promise<Response> => {
+export const getGlobalFeed = async (user: User | null): Promise<Response> => {
   const articlesResponse = await makeRequest(
     '/articles',
     'GET',
@@ -36,7 +34,7 @@ export const getGlobalFeed = async (
 };
 
 export const getArticlesByAuthor = async (
-  user: User | undefined,
+  user: User | null,
   username: string
 ) => {
   const articlesResponse = await makeRequest(
@@ -50,7 +48,7 @@ export const getArticlesByAuthor = async (
 };
 
 export const getFeedByTag = async (
-  user: User | undefined,
+  user: User | null,
   tag: string
 ): Promise<Response> => {
   const articlesResponse = await makeRequest('/articles', 'GET', {

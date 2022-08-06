@@ -10,8 +10,10 @@ import { ArticlesFeed } from '../components/ArticlesFeed';
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
   async ({ req, res }) => {
+    const user = req.session.user || null;
+
     const [{ articles }, { tags }] = await Promise.all([
-      (await getGlobalFeed(req.session.user)).json(),
+      (await getGlobalFeed(user)).json(),
       (await getAllTags()).json(),
     ]);
 
@@ -19,7 +21,7 @@ export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
       props: {
         tags,
         articles,
-        user: req.session.user,
+        user: user,
       },
     };
   },
