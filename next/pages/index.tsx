@@ -10,14 +10,9 @@ import { ArticlesFeed } from '../components/ArticlesFeed';
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
   async ({ req, res }) => {
-    const [feedsResponse, tagsResponse] = await Promise.all([
-      getGlobalFeed(req.session.user),
-      getAllTags(),
-    ]);
-
     const [{ articles }, { tags }] = await Promise.all([
-      feedsResponse.json(),
-      tagsResponse.json(),
+      (await getGlobalFeed(req.session.user)).json(),
+      (await getAllTags()).json(),
     ]);
 
     return {

@@ -6,14 +6,9 @@ import { NextPageWithLayout } from './_app';
 
 import { withIronSessionSsr } from 'iron-session/next';
 import { sessionOptions } from '../services/session';
-import { User } from '../models/User';
+
 import { ArticlesFeed } from '../components/ArticlesFeed';
 import { getUserFeed } from '../services/articles';
-
-interface FeedProps {
-  tags: string[];
-  user: User | null;
-}
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
   async ({ req, res }) => {
@@ -26,14 +21,9 @@ export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
       };
     }
 
-    const [feedsResponse, tagsResponse] = await Promise.all([
-      getUserFeed(req.session.user),
-      getAllTags(),
-    ]);
-
     const [{ articles }, { tags }] = await Promise.all([
-      feedsResponse.json(),
-      tagsResponse.json(),
+      (await getUserFeed(req.session.user)).json(),
+      (await getAllTags()).json(),
     ]);
 
     return {

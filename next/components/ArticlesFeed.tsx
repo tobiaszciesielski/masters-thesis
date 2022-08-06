@@ -50,13 +50,15 @@ export const ArticlesFeed = ({ articlesFeed, user }: ArticleFeedProps) => {
         articles.map((article: Article) => (
           <div key={article.slug} className="article-preview">
             <div className="article-meta">
-              <Link href={`/profile/${article.author.username}`} passHref>
-                <Image
-                  width={32}
-                  height={32}
-                  src={article.author.image}
-                  alt=""
-                />
+              <Link href={`/profile/${article.author.username}`}>
+                <a>
+                  <Image
+                    width={32}
+                    height={32}
+                    src={article.author.image}
+                    alt=""
+                  />
+                </a>
               </Link>
               <div className="info">
                 <Link href={`/profile/${article.author.username}`}>
