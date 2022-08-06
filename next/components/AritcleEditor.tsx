@@ -1,33 +1,11 @@
-import { GetServerSideProps, NextPage } from 'next';
-import { withIronSessionSsr } from 'iron-session/next';
-import { sessionOptions } from '../../services/session';
+import React from 'react';
+import { Article } from '../models/Article';
 
-interface ArticleData {
-  title?: string;
-  body?: string;
-  description?: string;
-  tagList?: string[];
+interface ArticleEditorProps {
+  article?: Article;
 }
 
-export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
-  async ({ req, res }) => {
-    if (!req.session.user) {
-      return {
-        redirect: {
-          destination: '/login',
-          permanent: false,
-        },
-      };
-    }
-
-    return {
-      props: {},
-    };
-  },
-  sessionOptions
-);
-
-const Editor: NextPage = () => {
+const ArticleEditor = ({ article }: ArticleEditorProps) => {
   return (
     <div className="editor-page">
       <div className="container page">
@@ -38,6 +16,7 @@ const Editor: NextPage = () => {
                 <fieldset className="form-group">
                   <input
                     required
+                    defaultValue={article?.title}
                     name="title"
                     type="text"
                     className="form-control form-control-lg"
@@ -47,6 +26,7 @@ const Editor: NextPage = () => {
                 <fieldset className="form-group">
                   <input
                     required
+                    defaultValue={article?.description}
                     name="description"
                     type="text"
                     className="form-control"
@@ -56,6 +36,7 @@ const Editor: NextPage = () => {
                 <fieldset className="form-group">
                   <textarea
                     required
+                    defaultValue={article?.body}
                     name="body"
                     className="form-control"
                     rows={8}
@@ -64,6 +45,10 @@ const Editor: NextPage = () => {
                 </fieldset>
                 <fieldset className="form-group">
                   <input
+                    defaultValue={article?.tagList.reduce(
+                      (prev, tag) => `${prev} ${tag}`,
+                      ''
+                    )}
                     name="tags"
                     type="text"
                     className="form-control"
@@ -72,7 +57,7 @@ const Editor: NextPage = () => {
                   <div className="tag-list"></div>
                 </fieldset>
                 <button className="btn btn-lg pull-xs-right btn-primary">
-                  {/* {article ? 'Edit' : 'Publish'} Article */}
+                  {article ? 'Edit' : 'Publish'} Article
                 </button>
               </fieldset>
             </form>
@@ -83,4 +68,4 @@ const Editor: NextPage = () => {
   );
 };
 
-export default Editor;
+export default ArticleEditor;

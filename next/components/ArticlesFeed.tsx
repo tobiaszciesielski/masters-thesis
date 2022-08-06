@@ -87,7 +87,12 @@ export const ArticlesFeed = ({ articlesFeed, user }: ArticleFeedProps) => {
               </button>
             </div>
 
-            <Link href={`/articles/${article.slug}`}>
+            <Link
+              href={{
+                pathname: '/articles/[slug]',
+                query: { slug: article.slug },
+              }}
+            >
               <a className="preview-link">
                 <h1>{article.title}</h1>
                 <p>{article.description}</p>
