@@ -1,20 +1,38 @@
 import { GetServerSideProps } from 'next';
+import { withIronSessionSsr } from 'iron-session/next';
 
 import FeedLayout from '../components/FeedLayout';
 import { getAllTags } from '../services/tags';
 import { NextPageWithLayout } from './_app';
+import { sessionOptions } from '../services/session';
+import { getGlobalFeed } from '../services/articles';
+import { ArticlesFeed } from '../components/ArticlesFeed';
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const response = await getAllTags();
-  const { tags } = await response.json();
+export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
+  async ({ req, res }) => {
+    const [feedsResponse, tagsResponse] = await Promise.all([
+      getGlobalFeed(req.session.user),
+      getAllTags(),
+    ]);
 
-  return {
-    props: { tags },
-  };
-};
+    const [{ articles }, { tags }] = await Promise.all([
+      feedsResponse.json(),
+      tagsResponse.json(),
+    ]);
 
-const GlobalFeed: NextPageWithLayout = (props) => {
-  return <div>GlobalFeed</div>;
+    return {
+      props: {
+        tags,
+        articles,
+        user: req.session.user,
+      },
+    };
+  },
+  sessionOptions
+);
+
+const GlobalFeed: NextPageWithLayout = (props: any) => {
+  return <ArticlesFeed articlesFeed={props.articles} user={props.user} />;
 };
 
 GlobalFeed.getLayout = function getLayout(page) {
