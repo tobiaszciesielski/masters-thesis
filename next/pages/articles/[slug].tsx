@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 
 import { withIronSessionSsr } from 'iron-session/next';
-import { sessionOptions } from '../../services/session';
+
 
 import { makeRequest } from '../../services/api';
 import { Article } from '../../models/Article';
@@ -14,6 +14,7 @@ import AuthRequired from '../../components/AuthRequired';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { sessionOptions } from '../../lib/session';
 
 interface ArticleDetailsProps {
   article: Article;
@@ -32,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
       };
     }
 
-    const [articleResponse, commentsReponse] = await Promise.all([
+    const [articleResponse, commentsResponse] = await Promise.all([
       makeRequest(`/articles/${slug}`, 'GET', {}),
       makeRequest(`/articles/${slug}/comments`, 'GET', {}),
     ]);
@@ -44,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
     }
 
     const { article } = await articleResponse.json();
-    const { comments } = await commentsReponse.json();
+    const { comments } = await commentsResponse.json();
 
     return { props: { article, comments } };
   },

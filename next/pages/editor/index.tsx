@@ -1,7 +1,8 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { withIronSessionSsr } from 'iron-session/next';
-import { sessionOptions } from '../../services/session';
+
 import { ArticleEditor } from '../../components/AritcleEditor';
+import { sessionOptions } from '../../lib/session';
 
 interface ArticleData {
   title?: string;

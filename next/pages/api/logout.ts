@@ -1,7 +1,8 @@
 import { NextApiHandler } from 'next';
 
 import { withIronSessionApiRoute } from 'iron-session/next';
-import { sessionOptions } from '../../services/session';
+import { sessionOptions } from '../../lib/session';
+
 
 const handler: NextApiHandler = async (req, res) => {
   req.session.destroy();

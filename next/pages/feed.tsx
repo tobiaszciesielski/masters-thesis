@@ -5,10 +5,11 @@ import { getAllTags } from '../services/tags';
 import { NextPageWithLayout } from './_app';
 
 import { withIronSessionSsr } from 'iron-session/next';
-import { sessionOptions } from '../services/session';
+
 
 import { ArticlesFeed } from '../components/ArticlesFeed';
 import { getUserFeed } from '../services/articles';
+import { sessionOptions } from '../lib/session';
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
   async ({ req, res }) => {

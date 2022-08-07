@@ -1,9 +1,10 @@
 import { NextPage } from 'next';
 
 import { withIronSessionSsr } from 'iron-session/next';
-import { sessionOptions } from '../services/session';
+
 import { makeRequest } from '../services/api';
 import { useRouter } from 'next/router';
+import { sessionOptions } from '../lib/session';
 
 interface UserData {
   email?: string;

@@ -2,7 +2,8 @@ import { User } from '../../models/User';
 import { makeRequest } from '../../services/api';
 
 import { withIronSessionApiRoute } from 'iron-session/next';
-import { sessionOptions } from '../../services/session';
+import { sessionOptions } from '../../lib/session';
+
 
 export default withIronSessionApiRoute(async (req, res) => {
   let formData = await req.body;

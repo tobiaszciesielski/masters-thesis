@@ -1,11 +1,12 @@
 import { GetServerSideProps } from 'next';
 import { NextPageWithLayout } from '../../_app';
 import { withIronSessionSsr } from 'iron-session/next';
-import { sessionOptions } from '../../../services/session';
+
 import { ArticlesFeed } from '../../../components/ArticlesFeed';
 import ProfileLayout from '../../../components/ProfileLayout';
 import { getProfile } from '../../../services/profile';
 import { getArticlesByAuthor } from '../../../services/articles';
+import { sessionOptions } from '../../../lib/session';
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
   async ({ req, res, query }) => {
@@ -19,16 +20,18 @@ export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
       };
     }
 
+    const authUser = req.session.user || null;
+
     const [profile, { articles }] = await Promise.all([
-      (await getProfile(req.session.user, username)).json(),
-      (await getArticlesByAuthor(req.session.user, username)).json(),
+      (await getProfile(authUser, username)).json(),
+      (await getArticlesByAuthor(authUser, username)).json(),
     ]);
 
     return {
       props: {
         profile,
         articles,
-        user: req.session.user,
+        user: authUser,
       },
     };
   },
