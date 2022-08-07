@@ -5,8 +5,8 @@ import type {
 } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 
-import Document from './components/Document/Document';
-import Layout from './components/Layout/Layout';
+import Document from './components/Document';
+import Layout from './components/Layout';
 import { UserProvider } from './context/user';
 import { getUser } from './lib/session-utils';
 

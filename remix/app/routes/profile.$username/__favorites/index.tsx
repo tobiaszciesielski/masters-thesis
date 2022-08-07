@@ -3,7 +3,7 @@ import type { LoaderFunction } from '@remix-run/node';
 
 import { useLoaderData } from '@remix-run/react';
 import { makeRequest } from '~/services/api';
-import { ArticlesFeed } from '~/components/ArticleFeed/ArticlesFeed';
+import { ArticlesFeed } from '~/components/ArticlesFeed';
 import type { ArticlesResponse } from '~/models/Article';
 import { getUser } from '~/lib/session-utils';
 

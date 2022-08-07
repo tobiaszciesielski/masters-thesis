@@ -5,7 +5,7 @@ import { useUser } from '~/context/user';
 import type { Article } from '~/models/Article';
 import { addToFavorites, removeFromFavorites } from '~/services/article';
 
-import { TagList } from '../TagsList/TagList';
+import { TagList } from './TagList';
 
 interface ArticleFeedProps {
   articlesFeed: Article[];

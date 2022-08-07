@@ -1,5 +1,5 @@
 import { NavLink } from '@remix-run/react';
-import AuthRequired from '../AuthRequired/AuthRequired';
+import AuthRequired from './AuthRequired';
 
 const defaultClass = 'nav-link';
 const activeClass = `${defaultClass} active`;

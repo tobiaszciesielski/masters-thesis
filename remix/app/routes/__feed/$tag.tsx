@@ -4,7 +4,7 @@ import type { LoaderFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { makeRequest } from '~/services/api';
 
-import { ArticlesFeed } from '~/components/ArticleFeed/ArticlesFeed';
+import { ArticlesFeed } from '~/components/ArticlesFeed';
 import type { ArticlesResponse } from '~/models/Article';
 
 export const loader: LoaderFunction = async ({ request, params }) => {

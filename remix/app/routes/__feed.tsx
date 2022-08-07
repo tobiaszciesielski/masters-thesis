@@ -3,7 +3,7 @@ import type { LoaderFunction } from '@remix-run/node';
 
 import { NavLink, Outlet, useLoaderData, useParams } from '@remix-run/react';
 import API_BASE from '~/services/api';
-import FeedToggle from '~/components/FeedToggle/FeedToggle';
+import FeedToggle from '~/components/FeedToggle';
 import { useState } from 'react';
 
 export const loader: LoaderFunction = async () => {

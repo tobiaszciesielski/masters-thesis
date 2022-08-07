@@ -2,9 +2,9 @@ import type { ActionFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { NavLink, useLoaderData, useParams } from '@remix-run/react';
 import { useState } from 'react';
-import { ArticleMeta } from '~/components/ArticleMeta/ArticleMeta';
-import AuthRequired from '~/components/AuthRequired/AuthRequired';
-import { TagList } from '~/components/TagsList/TagList';
+import { ArticleMeta } from '~/components/ArticleMeta';
+import AuthRequired from '~/components/AuthRequired';
+import { TagList } from '~/components/TagList';
 
 import { useUser } from '~/context/user';
 import { requireUserSession } from '~/lib/session-utils';
