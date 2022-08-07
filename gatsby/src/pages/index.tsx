@@ -1,26 +1,14 @@
 import React from 'react';
-
 import type { GetServerData } from 'gatsby';
+import { FeedLayout } from '../../components/FeedLayout';
+import { ArticlesFeed } from '../../components/ArticlesFeed';
 
 interface RandomImage {
   message: string;
   status: any;
 }
 
-const Index = ({ serverData }: _PageProps<RandomImage>) => {
-  console.log(serverData);
-
-  return (
-    <main>
-      <h1>SSR Page with Dogs</h1>
-      <img src={serverData.message} alt="" />
-    </main>
-  );
-};
-
-export default Index;
-
-export const getServerData: GetServerData<RandomImage> = async () => {
+export const getServerData: GetServerData<RandomImage> = async ({}) => {
   try {
     const res = await fetch(`https://dog.ceo/api/breeds/image/random`);
     if (!res.ok) {
@@ -36,3 +24,15 @@ export const getServerData: GetServerData<RandomImage> = async () => {
     };
   }
 };
+
+export const Index = ({ serverData, ...props }: _PageProps<RandomImage>) => {
+  return (
+    <FeedLayout tags={[]}>
+      <ArticlesFeed articlesFeed={[]} user={null} />
+    </FeedLayout>
+  );
+};
+
+export default Index;
+
+// export { Head } from '../../components/Head';

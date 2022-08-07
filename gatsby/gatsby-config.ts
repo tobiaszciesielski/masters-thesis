@@ -7,7 +7,6 @@ const config: GatsbyConfig = {
     title: `gatsby`,
     siteUrl: `https://www.yourdomain.tld`,
   },
-  plugins: [],
 };
 
 export default config;
