@@ -5,7 +5,7 @@ interface ArticleEditorProps {
   article?: Article;
 }
 
-const ArticleEditor = ({ article }: ArticleEditorProps) => {
+export const ArticleEditor = ({ article }: ArticleEditorProps) => {
   return (
     <div className="editor-page">
       <div className="container page">
@@ -67,5 +67,3 @@ const ArticleEditor = ({ article }: ArticleEditorProps) => {
     </div>
   );
 };
-
-export default ArticleEditor;

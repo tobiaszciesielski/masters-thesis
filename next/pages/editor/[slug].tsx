@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { withIronSessionSsr } from 'iron-session/next';
 import { sessionOptions } from '../../services/session';
-import AritcleEditor from '../../components/AritcleEditor';
+import { ArticleEditor } from '../../components/AritcleEditor';
 import { makeRequest } from '../../services/api';
 
 interface ArticleData {
@@ -12,7 +12,7 @@ interface ArticleData {
 }
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
-  async ({ req, res, query }) => {
+  async ({ req, query }) => {
     if (!req.session.user) {
       return {
         redirect: {
@@ -53,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
 );
 
 const Editor: NextPage = (props: any) => {
-  return <AritcleEditor article={props.article} />;
+  return <ArticleEditor article={props.article} />;
 };
 
 export default Editor;
