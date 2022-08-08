@@ -1,5 +1,6 @@
 const API_BASE = 'http://localhost:4000/api';
 const SSR_SERVER_API_BASE = '/api';
+import fetch from 'node-fetch';
 
 export default API_BASE;
 
@@ -28,6 +29,7 @@ export const makeRequest = async (
 
   const api = toSSRServer ? SSR_SERVER_API_BASE : API_BASE;
 
+  // @ts-ignore
   return fetch(`${api}${url}${params}`, {
     method: method,
     body: method !== 'GET' ? JSON.stringify(body) : undefined,

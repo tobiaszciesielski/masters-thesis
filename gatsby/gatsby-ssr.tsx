@@ -2,19 +2,6 @@ import React from 'react';
 import type { GatsbySSR } from 'gatsby';
 import { UserProvider } from './context/user';
 import { Layout } from './components/Layout';
-import { Head } from './components/Head';
-
-export const wrapPageElement: GatsbySSR['wrapPageElement'] = ({ element }) => {
-  console.log('hello from server wrap page');
-
-  return <Layout>{element}</Layout>;
-};
-
-export const wrapRootElement: GatsbySSR['wrapRootElement'] = ({ element }) => {
-  console.log('hello from server wrap root');
-
-  return <UserProvider user={null}>{element}</UserProvider>;
-};
 
 const headComponents = [
   <title>Conduit</title>,
@@ -32,6 +19,18 @@ const headComponents = [
   <link rel="stylesheet" href="//demo.productionready.io/main.css" />,
   <link rel="icon" href="/favicon.ico" />,
 ];
+
+export const wrapPageElement: GatsbySSR['wrapPageElement'] = ({ element }) => {
+  console.log('hello from server wrap page');
+
+  return <Layout>{element}</Layout>;
+};
+
+export const wrapRootElement: GatsbySSR['wrapRootElement'] = ({ element }) => {
+  console.log('hello from server wrap root');
+
+  return <UserProvider user={null}>{element}</UserProvider>;
+};
 
 export const onRenderBody: GatsbySSR['onRenderBody'] = ({
   setHeadComponents,

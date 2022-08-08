@@ -1,10 +1,10 @@
-import { Link } from 'gatsby';
+import { Link, navigate } from 'gatsby';
 import React, { useEffect, useState } from 'react';
 
 import { User } from '../models/User';
 import { removeFromFavorites, addToFavorites } from '../services/article';
 import { TagList } from './TagList';
-import { useNavigate } from '@reach/router';
+
 import { Article } from '../models/Article';
 
 interface ArticleFeedProps {
@@ -14,7 +14,6 @@ interface ArticleFeedProps {
 
 export const ArticlesFeed = ({ articlesFeed, user }: ArticleFeedProps) => {
   const [articles, setArticles] = useState(articlesFeed);
-  const navigate = useNavigate();
 
   const toggleLike = async (likedArticle: Article) => {
     if (!user) {

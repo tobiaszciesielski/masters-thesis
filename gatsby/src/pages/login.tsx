@@ -1,5 +1,5 @@
 import { makeRequest } from '../../services/api';
-import { useNavigate } from '@reach/router';
+import { navigate } from 'gatsby';
 import { Link } from 'gatsby';
 import React from 'react';
 
@@ -9,8 +9,6 @@ interface LoginData {
 }
 
 const Login = () => {
-  const navigate = useNavigate();
-
   const submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 

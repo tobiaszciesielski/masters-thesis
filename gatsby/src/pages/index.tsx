@@ -8,7 +8,7 @@ interface RandomImage {
   status: any;
 }
 
-export const getServerData: GetServerData<RandomImage> = async ({}) => {
+export const getServerData: GetServerData<RandomImage> = async (req) => {
   try {
     const res = await fetch(`https://dog.ceo/api/breeds/image/random`);
     if (!res.ok) {
