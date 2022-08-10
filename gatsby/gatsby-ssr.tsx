@@ -30,7 +30,7 @@ export const wrapPageElement: GatsbySSR['wrapPageElement'] = ({
     return (
       <Layout>
         {/* @ts-ignore */}
-        <FeedLayout tags={props.serverData.tags}>{element}</FeedLayout>
+        <FeedLayout {...props.serverData}>{element}</FeedLayout>
       </Layout>
     );
   }

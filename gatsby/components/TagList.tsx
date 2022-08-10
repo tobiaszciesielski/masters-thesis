@@ -7,7 +7,7 @@ export interface TagListProps {
 export const TagList = ({ tags }: TagListProps) => {
   return (
     <ul className="tag-list">
-      {tags.map((tag: string, i: number) => (
+      {tags?.map((tag: string, i: number) => (
         <li
           key={i}
           className="tag-default tag-pill tag-outline ng-binding ng-scope"

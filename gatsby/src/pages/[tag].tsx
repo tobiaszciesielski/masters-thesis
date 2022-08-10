@@ -25,14 +25,14 @@ export const getServerData: GetServerData<any> = async (
   ]);
 
   return {
-    props: { user, articles, tags },
+    props: { user, articles, tags, selectedTag: tagParam },
   };
 };
 
-export const Index = ({ serverData, ...props }: _PageProps<any>) => {
+export const FilteredTag = ({ serverData, ...props }: _PageProps<any>) => {
   const { user, articles } = serverData;
 
   return <ArticlesFeed articlesFeed={articles} user={user} />;
 };
 
-export default Index;
+export default FilteredTag;

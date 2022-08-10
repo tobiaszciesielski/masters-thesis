@@ -6,16 +6,19 @@ import FeedToggle from './FeedToggle';
 interface FeedLayoutProps {
   children: React.ReactNode;
   tags: string[];
+  selectedTag?: string;
 }
 
-export function FeedLayout({ children, tags }: FeedLayoutProps) {
-  const params = useParams();
-
-  const [selectedTag, setSelectedTag] = useState(params?.tag);
+export function FeedLayout({
+  children,
+  tags,
+  selectedTag: tagParam,
+}: FeedLayoutProps) {
+  const [selectedTag, setSelectedTag] = useState(tagParam);
 
   useEffect(() => {
-    setSelectedTag(params?.tag);
-  }, [params?.tag]);
+    setSelectedTag(tagParam);
+  }, [tagParam]);
 
   return (
     <div className="home-page">
@@ -43,7 +46,7 @@ export function FeedLayout({ children, tags }: FeedLayoutProps) {
               <p>Popular Tags</p>
 
               <div className="tag-list">
-                {tags.map((tag: string, i: number) => (
+                {tags?.map((tag: string, i: number) => (
                   <Link
                     to={`/${tag}`}
                     key={i}
