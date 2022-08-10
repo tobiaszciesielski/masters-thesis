@@ -5,5 +5,3 @@ const NotFound = () => {
 };
 
 export default NotFound;
-
-// export { Head } from '../../components/Head';

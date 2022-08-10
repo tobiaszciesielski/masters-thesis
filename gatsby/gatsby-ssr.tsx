@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { GatsbySSR } from 'gatsby';
 import { UserProvider } from './context/user';
 import { Layout } from './components/Layout';
+import path from 'path';
+import { FeedLayout } from './components/FeedLayout';
 
 const headComponents = [
   <title>Conduit</title>,
@@ -20,15 +22,23 @@ const headComponents = [
   <link rel="icon" href="/favicon.ico" />,
 ];
 
-export const wrapPageElement: GatsbySSR['wrapPageElement'] = ({ element }) => {
-  console.log('hello from server wrap page');
+export const wrapPageElement: GatsbySSR['wrapPageElement'] = ({
+  element,
+  props,
+}) => {
+  if (['/', '/:tag', '/feed/'].includes(props.location.pathname)) {
+    return (
+      <Layout>
+        {/* @ts-ignore */}
+        <FeedLayout tags={props.serverData.tags}>{element}</FeedLayout>
+      </Layout>
+    );
+  }
 
   return <Layout>{element}</Layout>;
 };
 
 export const wrapRootElement: GatsbySSR['wrapRootElement'] = ({ element }) => {
-  console.log('hello from server wrap root');
-
   return <UserProvider user={null}>{element}</UserProvider>;
 };
 

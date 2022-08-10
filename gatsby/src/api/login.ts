@@ -1,15 +1,10 @@
 import { GatsbyFunctionRequest, GatsbyFunctionResponse } from 'gatsby';
+import { createSessionCookie } from '../../lib/session';
 import { User } from '../../models/User';
 import { makeRequest } from '../../services/api';
-import { createSessionCookie, getUser } from '../../lib/session';
-
-
-interface ContactBody {
-  message: string;
-}
 
 export default async function handler(
-  req: GatsbyFunctionRequest<ContactBody>,
+  req: GatsbyFunctionRequest,
   res: GatsbyFunctionResponse
 ) {
   let formData = await req.body;
@@ -26,7 +21,7 @@ export default async function handler(
   }
 
   const { user }: { user: User } = await response.json();
-  getUser(req);
+
   createSessionCookie(res, user.token);
 
   res.status(200);

@@ -9,13 +9,13 @@ interface FeedLayoutProps {
 }
 
 export function FeedLayout({ children, tags }: FeedLayoutProps) {
-  const { tag } = useParams();
+  const params = useParams();
 
-  const [selectedTag, setSelectedTag] = useState(tag);
+  const [selectedTag, setSelectedTag] = useState(params?.tag);
 
   useEffect(() => {
-    setSelectedTag(tag);
-  }, [tag]);
+    setSelectedTag(params?.tag);
+  }, [params?.tag]);
 
   return (
     <div className="home-page">
@@ -44,13 +44,13 @@ export function FeedLayout({ children, tags }: FeedLayoutProps) {
 
               <div className="tag-list">
                 {tags.map((tag: string, i: number) => (
-                  <Link to={`${tag}`} key={i}>
-                    <a
-                      className="tag-pill tag-default"
-                      onClick={() => setSelectedTag(tag)}
-                    >
-                      {tag}
-                    </a>
+                  <Link
+                    to={`/${tag}`}
+                    key={i}
+                    className="tag-pill tag-default"
+                    onClick={() => setSelectedTag(tag)}
+                  >
+                    {tag}
                   </Link>
                 ))}
               </div>

@@ -44,7 +44,7 @@ const FeedToggle = ({ selectedTag, clearSelectedTag }: FeedToggleProps) => {
             <Link
               className={defaultClass}
               activeClassName={activeClass}
-              to={`${selectedTag}`}
+              to={`/${selectedTag}`}
             >
               # {selectedTag}
             </Link>
