@@ -128,7 +128,7 @@ const ArticleDetails = (props: _PageProps<ArticleDetailsProps>) => {
                 </div>
               </form>
 
-              {!!comments.length &&
+              {!!comments?.length &&
                 comments.map((comment) => (
                   <div key={comment.id} className="card">
                     <div className="card-block">
