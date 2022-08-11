@@ -11,13 +11,13 @@ export interface ArticleMetaProps {
   user: User | null;
 }
 
-export const ArticleMeta = ({ article, user }: ArticleMetaProps) => {
+export const ArticleMeta = (props: ArticleMetaProps) => {
   const deleteArticle = async () => {
     const response = await makeRequest(
-      `/articles/${article.slug}`,
+      `/articles/${props.article?.slug}`,
       'DELETE',
       {},
-      user?.token
+      props.user?.token
     );
 
     if (response.status === 200) {
@@ -27,21 +27,24 @@ export const ArticleMeta = ({ article, user }: ArticleMetaProps) => {
 
   return (
     <div className="article-meta">
-      <Link to={`/profile/${article.author.username}`}>
-        <img src={article.author.image} alt="" />
+      <Link to={`/profile/${props.article?.author.username}`}>
+        <img src={props.article?.author.image} alt="" />
       </Link>
       <div className="info">
-        <Link className="author" to={`/profile/${article.author.username}`}>
-          {article.author.username}
+        <Link
+          className="author"
+          to={`/profile/${props.article?.author.username}`}
+        >
+          {props.article?.author.username}
         </Link>
-        <span className="date">{article.createdAt}</span>
+        <span className="date">{props.article?.createdAt}</span>
       </div>
       <AuthRequired>
-        {article.author.username === user?.username ? (
+        {props.article?.author.username === props.user?.username ? (
           <>
             <Link
               className="btn btn-outline-secondary btn-sm"
-              to={`/editor/${article.slug}`}
+              to={`/editor/${props.article?.slug}`}
             >
               <i className="ion-edit"></i> Edit Article
             </Link>
@@ -57,13 +60,13 @@ export const ArticleMeta = ({ article, user }: ArticleMetaProps) => {
           <>
             <button className="btn btn-sm btn-outline-secondary">
               <i className="ion-plus-round"></i>
-              &nbsp; Follow {article.author.username}{' '}
+              &nbsp; Follow {props.article?.author.username}{' '}
             </button>
             &nbsp;&nbsp;
             <button className="btn btn-sm btn-outline-primary">
               <i className="ion-heart"></i>
               &nbsp; Favorite Post{' '}
-              <span className="counter">({article.favoritesCount})</span>
+              <span className="counter">({props.article?.favoritesCount})</span>
             </button>
           </>
         )}

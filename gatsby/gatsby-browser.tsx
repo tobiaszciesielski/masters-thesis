@@ -3,12 +3,31 @@ import type { GatsbyBrowser } from 'gatsby';
 
 import { Layout } from './components/Layout';
 import { FeedLayout } from './components/FeedLayout';
+import { ProfileLayout } from './components/ProfileLayout';
+import { UserProvider } from './context/user';
+import { getAuthTokenFromCookies } from './lib/session';
 
 export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
   element,
   props,
 }) => {
-  console.log(props);
+  // console.log('browser', props.serverData);
+  if (
+    ['/profile/:username', '/profile/:username/favorites'].includes(props.path)
+  ) {
+    return (
+      <Layout>
+        <ProfileLayout
+          // @ts-ignore
+          userProfile={props.serverData?.profile}
+          {...props}
+        >
+          {element}
+        </ProfileLayout>
+      </Layout>
+    );
+  }
+
   if (['/', '/:tag', '/feed/'].includes(props.path)) {
     return (
       <Layout>
@@ -26,4 +45,10 @@ export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
   }
 
   return <Layout {...props}>{element}</Layout>;
+};
+
+export const wrapRootElement: GatsbyBrowser['wrapRootElement'] = ({
+  element,
+}) => {
+  return <UserProvider user={null}>{element}</UserProvider>;
 };

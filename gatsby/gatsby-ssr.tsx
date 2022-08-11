@@ -4,6 +4,8 @@ import { UserProvider } from './context/user';
 import { Layout } from './components/Layout';
 
 import { FeedLayout } from './components/FeedLayout';
+import { ProfileLayout } from './components/ProfileLayout';
+import { getAuthTokenFromCookies } from './lib/session';
 
 const headComponents = [
   <title>Conduit</title>,
@@ -29,6 +31,25 @@ export const wrapPageElement: GatsbySSR['wrapPageElement'] = ({
   element,
   props,
 }) => {
+  // console.log('ssr', props.serverData);
+  if (
+    ['/profile/:username', '/profile/:username/favorites'].includes(
+      props.location.pathname
+    )
+  ) {
+    return (
+      <Layout>
+        <ProfileLayout
+          // @ts-ignore
+          userProfile={props.serverData?.profile}
+          {...props}
+        >
+          {element}
+        </ProfileLayout>
+      </Layout>
+    );
+  }
+
   if (['/', '/:tag', '/feed/'].includes(props.location.pathname)) {
     return (
       <Layout>

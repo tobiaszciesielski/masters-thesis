@@ -6,7 +6,7 @@ export const getUserFeed = async (
   author?: string
 ): Promise<Response> => {
   const articlesResponse = await makeRequest(
-    '/articles/feed',
+    '/articles/feed/',
     'GET',
     {
       limit: 20,

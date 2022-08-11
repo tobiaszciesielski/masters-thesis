@@ -3,6 +3,7 @@ import { GetServerData, navigate, PageProps } from 'gatsby';
 import { Link } from 'gatsby';
 import React from 'react';
 import { getUser } from '../../lib/session';
+import { useLogin } from '../../context/user';
 
 interface LoginData {
   username?: string;
@@ -10,11 +11,13 @@ interface LoginData {
 }
 
 export const getServerData: GetServerData<any> = async (req) => {
-  const user = getUser(req);
-  return { props: { user } };
+  const user = await getUser(req);
+  return { props: { user: user || null } };
 };
 
 const Login = (props: _PageProps<any>) => {
+  const login = useLogin();
+
   const submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -31,6 +34,8 @@ const Login = (props: _PageProps<any>) => {
     );
 
     if (response.status === 200) {
+      const { user } = await response.json();
+      login(user);
       navigate('/');
     }
 

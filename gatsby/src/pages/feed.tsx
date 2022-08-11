@@ -11,6 +11,7 @@ export const getServerData: GetServerData<any> = async (
   const user = await getUser(req);
   if (!user) {
     navigate('/login');
+    return {}
   }
 
   const tagParam = req.params?.tag as string;

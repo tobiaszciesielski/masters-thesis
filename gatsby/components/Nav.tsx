@@ -7,6 +7,7 @@ const activeClass = `${defaultClass} active`;
 
 export default function Nav() {
   const user = useUser();
+  console.log(user)
 
   return (
     <nav className="navbar navbar-light">

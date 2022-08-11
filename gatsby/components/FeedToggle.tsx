@@ -1,5 +1,5 @@
 import React from 'react';
-import {AuthRequired} from './AuthRequired';
+import { AuthRequired } from './AuthRequired';
 
 import { Link } from 'gatsby';
 
@@ -20,7 +20,7 @@ const FeedToggle = ({ selectedTag, clearSelectedTag }: FeedToggleProps) => {
             <Link
               className={defaultClass}
               activeClassName={activeClass}
-              to="/feed"
+              to="/feed/"
               onClick={clearSelectedTag}
             >
               Your Feed
