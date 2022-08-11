@@ -5,7 +5,7 @@ import FeedToggle from './FeedToggle';
 
 interface FeedLayoutProps {
   children: React.ReactNode;
-  tags: string[];
+  tags?: string[];
   selectedTag?: string;
 }
 

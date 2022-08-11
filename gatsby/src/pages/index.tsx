@@ -19,9 +19,9 @@ export const getServerData: GetServerData<any> = async (req) => {
 };
 
 export const Index = ({ serverData, ...props }: _PageProps<any>) => {
-  const { user, articles } = serverData;
-
-  return <ArticlesFeed articlesFeed={articles} user={user} />;
+  return (
+    <ArticlesFeed articlesFeed={serverData?.articles} user={serverData?.user} />
+  );
 };
 
 export default Index;

@@ -79,5 +79,3 @@ const Login = (props: _PageProps<any>) => {
 };
 
 export default Login;
-
-// export { Head } from '../../components/Head';

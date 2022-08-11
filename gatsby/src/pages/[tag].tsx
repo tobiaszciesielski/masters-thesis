@@ -1,5 +1,5 @@
 import React from 'react';
-import type { GetServerData, GetServerDataReturn } from 'gatsby';
+import { GetServerData, GetServerDataReturn, navigate } from 'gatsby';
 import { ArticlesFeed } from '../../components/ArticlesFeed';
 import { getUser } from '../../lib/session';
 import { getFeedByTag } from '../../services/articles';
@@ -10,11 +10,8 @@ export const getServerData: GetServerData<any> = async (
 ): GetServerDataReturn => {
   const tagParam = req.params?.tag as string;
   if (!tagParam) {
-    return {
-      headers: {
-        Location: '/',
-      },
-    };
+    navigate('/');
+    return {};
   }
 
   const user = await getUser(req);
@@ -30,9 +27,9 @@ export const getServerData: GetServerData<any> = async (
 };
 
 export const FilteredTag = ({ serverData, ...props }: _PageProps<any>) => {
-  const { user, articles } = serverData;
-
-  return <ArticlesFeed articlesFeed={articles} user={user} />;
+  return (
+    <ArticlesFeed articlesFeed={serverData?.articles} user={serverData?.user} />
+  );
 };
 
 export default FilteredTag;

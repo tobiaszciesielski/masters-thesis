@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthRequired from './AuthRequired';
+import {AuthRequired} from './AuthRequired';
 
 import { Link } from 'gatsby';
 

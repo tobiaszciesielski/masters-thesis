@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import type { GatsbySSR } from 'gatsby';
 import { UserProvider } from './context/user';
 import { Layout } from './components/Layout';
-import path from 'path';
+
 import { FeedLayout } from './components/FeedLayout';
 
 const headComponents = [
@@ -29,13 +29,20 @@ export const wrapPageElement: GatsbySSR['wrapPageElement'] = ({
   if (['/', '/:tag', '/feed/'].includes(props.location.pathname)) {
     return (
       <Layout>
-        {/* @ts-ignore */}
-        <FeedLayout {...props.serverData}>{element}</FeedLayout>
+        <FeedLayout
+          // @ts-ignore
+          tags={props.serverData?.tags}
+          // @ts-ignore
+          selectedTag={props.serverData?.selectedTag}
+          {...props}
+        >
+          {element}
+        </FeedLayout>
       </Layout>
     );
   }
 
-  return <Layout>{element}</Layout>;
+  return <Layout {...props}>{element}</Layout>;
 };
 
 export const wrapRootElement: GatsbySSR['wrapRootElement'] = ({ element }) => {

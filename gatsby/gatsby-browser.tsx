@@ -8,14 +8,22 @@ export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
   element,
   props,
 }) => {
+  console.log(props);
   if (['/', '/:tag', '/feed/'].includes(props.path)) {
     return (
       <Layout>
-        {/* @ts-ignore */}
-        <FeedLayout {...props.serverData}>{element}</FeedLayout>
+        <FeedLayout
+          // @ts-ignore
+          tags={props.serverData?.tags}
+          // @ts-ignore
+          selectedTag={props.serverData?.selectedTag}
+          {...props}
+        >
+          {element}
+        </FeedLayout>
       </Layout>
     );
   }
 
-  return <Layout>{element}</Layout>;
+  return <Layout {...props}>{element}</Layout>;
 };
