@@ -53,7 +53,7 @@ const Settings = (props: _PageProps<any>) => {
               <fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={props?.serverData?.user?.image}
+                    defaultValue={props.serverData?.user?.image}
                     name="image"
                     className="form-control"
                     type="text"
@@ -62,7 +62,7 @@ const Settings = (props: _PageProps<any>) => {
                 </fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={props?.serverData?.user?.username}
+                    defaultValue={props.serverData?.user?.username}
                     name="username"
                     className="form-control form-control-lg"
                     type="text"
@@ -71,7 +71,7 @@ const Settings = (props: _PageProps<any>) => {
                 </fieldset>
                 <fieldset className="form-group">
                   <textarea
-                    defaultValue={props?.serverData?.user?.bio}
+                    defaultValue={props.serverData?.user?.bio}
                     name="bio"
                     className="form-control form-control-lg"
                     rows={8}
@@ -80,7 +80,7 @@ const Settings = (props: _PageProps<any>) => {
                 </fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={props?.serverData?.user?.email}
+                    defaultValue={props.serverData?.user?.email}
                     name="email"
                     className="form-control form-control-lg"
                     type="text"

@@ -12,19 +12,19 @@ interface ArticleFeedProps {
   user: User | null;
 }
 
-export const ArticlesFeed = ({ articlesFeed, user }: ArticleFeedProps) => {
-  const [articles, setArticles] = useState(articlesFeed);
+export const ArticlesFeed = (props: ArticleFeedProps) => {
+  const [articles, setArticles] = useState(props.articlesFeed);
 
   const toggleLike = async (likedArticle: Article) => {
-    if (!user) {
+    if (!props.user) {
       navigate('register');
     }
 
     let response;
     if (likedArticle.favorited) {
-      response = await removeFromFavorites(likedArticle, user);
+      response = await removeFromFavorites(likedArticle, props.user);
     } else {
-      response = await addToFavorites(likedArticle, user);
+      response = await addToFavorites(likedArticle, props.user);
     }
 
     if (response.status !== 200) {
@@ -40,8 +40,8 @@ export const ArticlesFeed = ({ articlesFeed, user }: ArticleFeedProps) => {
   };
 
   useEffect(() => {
-    setArticles(articlesFeed);
-  }, [articlesFeed]);
+    setArticles(props.articlesFeed);
+  }, [props.articlesFeed]);
 
   return (
     <>

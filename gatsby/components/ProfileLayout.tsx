@@ -47,7 +47,7 @@ export function ProfileLayout(props: ProfileLayoutProps) {
 
               <AuthRequired>
                 {isMyProfile ? (
-                  <Link to="/settings">
+                  <Link to="/settings/">
                     <button className="btn btn-sm btn-outline-secondary action-btn">
                       <i className="ion-gear-a"></i>
                       &nbsp; Edit profile settings

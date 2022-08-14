@@ -34,7 +34,6 @@ export const UserProvider: FC<UserProviderProps> = ({ children, user }) => {
       }
     }
   }, []);
-  console.log(authUser);
 
   return (
     <UserContext.Provider

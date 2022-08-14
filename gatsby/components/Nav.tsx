@@ -7,7 +7,6 @@ const activeClass = `${defaultClass} active`;
 
 export default function Nav() {
   const user = useUser();
-  console.log(user)
 
   return (
     <nav className="navbar navbar-light">
@@ -38,7 +37,7 @@ export default function Nav() {
                 <Link
                   className={defaultClass}
                   activeClassName={activeClass}
-                  to="/settings"
+                  to="/settings/"
                 >
                   <i className="ion-gear-a"></i>&nbsp;Settings
                 </Link>
