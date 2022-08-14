@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useUser } from '../context/user';
 
 import FeedToggle from './FeedToggle';
 
@@ -13,6 +14,7 @@ export default function FeedLayout({ children, tags }: FeedLayoutProps) {
   const router = useRouter();
   const tagParam = router.query.tag as string | undefined;
   const [selectedTag, setSelectedTag] = useState(tagParam);
+  const user = useUser();
 
   useEffect(() => {
     setSelectedTag(tagParam);
@@ -20,12 +22,14 @@ export default function FeedLayout({ children, tags }: FeedLayoutProps) {
 
   return (
     <div className="home-page">
-      <div className="banner">
-        <div className="container">
-          <h1 className="logo-font">conduit</h1>
-          <p>A place to share your knowledge.</p>
+      {!user && (
+        <div className="banner">
+          <div className="container">
+            <h1 className="logo-font">conduit</h1>
+            <p>A place to share your knowledge.</p>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="container page">
         <div className="row">
