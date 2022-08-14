@@ -21,8 +21,7 @@ const Login = (props: _PageProps<any>) => {
   const submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
-    // @ts-ignore
+    const formData = new FormData(event.currentTarget) as any;
     const values = Object.fromEntries(formData) as LoginData;
 
     const response = await makeRequest(
