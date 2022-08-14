@@ -1,6 +1,6 @@
-import { useParams } from '@reach/router';
-import { Link } from 'gatsby';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'gatsby';
+import { useUser } from '../context/user';
 import FeedToggle from './FeedToggle';
 
 interface FeedLayoutProps {
@@ -14,6 +14,7 @@ export function FeedLayout({
   tags,
   selectedTag: tagParam,
 }: FeedLayoutProps) {
+  const user = useUser();
   const [selectedTag, setSelectedTag] = useState(tagParam);
 
   useEffect(() => {
@@ -22,12 +23,14 @@ export function FeedLayout({
 
   return (
     <div className="home-page">
-      <div className="banner">
-        <div className="container">
-          <h1 className="logo-font">conduit</h1>
-          <p>A place to share your knowledge.</p>
+      {!user && (
+        <div className="banner">
+          <div className="container">
+            <h1 className="logo-font">conduit</h1>
+            <p>A place to share your knowledge.</p>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="container page">
         <div className="row">

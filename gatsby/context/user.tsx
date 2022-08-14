@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import type { FC } from 'react';
 import { User } from '../models/User';
-import { getAuthTokenFromCookies, getUser } from '../lib/session';
+import { getAuthTokenFromCookies } from '../lib/session';
 import { getUserWithToken } from '../services/auth';
 
 type AuthUser = User | null;

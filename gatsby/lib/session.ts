@@ -1,7 +1,11 @@
 import cookie from 'cookie';
 import { getUserWithToken } from '../services/auth';
 import { User } from '../models/User';
-import { GatsbyFunctionResponse, GetServerDataProps } from 'gatsby';
+import {
+  GatsbyFunctionRequest,
+  GatsbyFunctionResponse,
+  GetServerDataProps,
+} from 'gatsby';
 
 const AUTH_TOKEN_KEY = 'gatsby_auth_token';
 
@@ -12,6 +16,17 @@ export const getAuthTokenFromCookies = (
   const parsedCookie = cookie.parse(cookies);
   return parsedCookie[AUTH_TOKEN_KEY];
 };
+
+export async function getApiRouteUser(
+  request: GatsbyFunctionRequest
+): Promise<User | null> {
+  console.log(request.cookies);
+  const token = request.cookies[AUTH_TOKEN_KEY];
+  if (!token) return null;
+
+  const user = await getUserWithToken(token);
+  return user;
+}
 
 export async function getUser(
   request: GetServerDataProps

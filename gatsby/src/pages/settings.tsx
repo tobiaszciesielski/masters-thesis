@@ -1,6 +1,6 @@
 import { GetServerData, navigate } from 'gatsby';
 import React from 'react';
-import { useLogout } from '../../context/user';
+import { useLogin, useLogout, useUser } from '../../context/user';
 import { getUser } from '../../lib/session';
 import { makeRequest } from '../../services/api';
 
@@ -30,6 +30,8 @@ export const getServerData: GetServerData<any> = async (req) => {
 
 const Settings = (props: _PageProps<any>) => {
   const logout = useLogout();
+  const login = useLogin();
+  const user = useUser();
 
   const logoutUser = async () => {
     const request = await makeRequest(
@@ -46,6 +48,26 @@ const Settings = (props: _PageProps<any>) => {
     }
   };
 
+  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget) as any;
+    const values = Object.fromEntries(formData);
+    const response = await makeRequest(
+      '/settings',
+      'POST',
+      values,
+      user?.token,
+      true
+    );
+
+    if (response.status === 200) {
+      const updatedUser = await response.json();
+      login({ ...user, ...updatedUser });
+      navigate(`/profile/${updatedUser?.username}`);
+    }
+  };
+
   return (
     <div className="settings-page">
       <div className="container page">
@@ -53,11 +75,11 @@ const Settings = (props: _PageProps<any>) => {
           <div className="col-md-6 offset-md-3 col-xs-12">
             <h1 className="text-xs-center">Your Settings</h1>
 
-            <form method="post">
+            <form onSubmit={submit}>
               <fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={props.serverData?.user?.image}
+                    defaultValue={user?.image}
                     name="image"
                     className="form-control"
                     type="text"
@@ -66,7 +88,7 @@ const Settings = (props: _PageProps<any>) => {
                 </fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={props.serverData?.user?.username}
+                    defaultValue={user?.username}
                     name="username"
                     className="form-control form-control-lg"
                     type="text"
@@ -75,7 +97,7 @@ const Settings = (props: _PageProps<any>) => {
                 </fieldset>
                 <fieldset className="form-group">
                   <textarea
-                    defaultValue={props.serverData?.user?.bio}
+                    defaultValue={user?.bio}
                     name="bio"
                     className="form-control form-control-lg"
                     rows={8}
@@ -84,7 +106,7 @@ const Settings = (props: _PageProps<any>) => {
                 </fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={props.serverData?.user?.email}
+                    defaultValue={user?.email}
                     name="email"
                     className="form-control form-control-lg"
                     type="text"
