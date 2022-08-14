@@ -6,13 +6,12 @@ import { NextPageWithLayout } from './_app';
 
 import { withIronSessionSsr } from 'iron-session/next';
 
-
 import { ArticlesFeed } from '../components/ArticlesFeed';
 import { getUserFeed } from '../services/articles';
 import { sessionOptions } from '../lib/session';
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
-  async ({ req, res }) => {
+  async ({ req }) => {
     if (!req.session.user) {
       return {
         redirect: {

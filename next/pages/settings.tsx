@@ -5,18 +5,10 @@ import { withIronSessionSsr } from 'iron-session/next';
 import { makeRequest } from '../services/api';
 import { useRouter } from 'next/router';
 import { sessionOptions } from '../lib/session';
-
-interface UserData {
-  email?: string;
-  username?: string;
-  bio?: string;
-  image?: string;
-  password?: string;
-}
+import { useUser } from '../context/user';
 
 export const getServerSideProps = withIronSessionSsr(async ({ req }) => {
   const { user } = req.session;
-
   if (!user) {
     return {
       redirect: {
@@ -25,25 +17,42 @@ export const getServerSideProps = withIronSessionSsr(async ({ req }) => {
       },
     };
   }
-
-  return {
-    props: { user },
-  };
+  return { props: { user } };
 }, sessionOptions);
 
 const Settings: NextPage = (props: any) => {
   const router = useRouter();
+  const user = useUser();
 
   const logout = async () => {
     const request = await makeRequest(
       '/logout',
       'DELETE',
       {},
-      props.user?.token,
+      user?.token,
       true
     );
     if (request.status === 200) {
       router.push('/');
+    }
+  };
+
+  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const values = Object.fromEntries(formData);
+    const response = await makeRequest(
+      '/settings',
+      'POST',
+      values,
+      user?.token,
+      true
+    );
+
+    if (response.status === 200) {
+      const updatedUser = await response.json();
+      router.push(`/profile/${updatedUser?.username}`);
     }
   };
 
@@ -54,11 +63,11 @@ const Settings: NextPage = (props: any) => {
           <div className="col-md-6 offset-md-3 col-xs-12">
             <h1 className="text-xs-center">Your Settings</h1>
 
-            <form method="post">
+            <form onSubmit={submit}>
               <fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={props.user?.image}
+                    defaultValue={user?.image}
                     name="image"
                     className="form-control"
                     type="text"
@@ -67,7 +76,7 @@ const Settings: NextPage = (props: any) => {
                 </fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={props.user?.username}
+                    defaultValue={user?.username}
                     name="username"
                     className="form-control form-control-lg"
                     type="text"
@@ -76,7 +85,7 @@ const Settings: NextPage = (props: any) => {
                 </fieldset>
                 <fieldset className="form-group">
                   <textarea
-                    defaultValue={props.user?.bio}
+                    defaultValue={user?.bio}
                     name="bio"
                     className="form-control form-control-lg"
                     rows={8}
@@ -85,7 +94,7 @@ const Settings: NextPage = (props: any) => {
                 </fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={props.user?.email}
+                    defaultValue={user?.email}
                     name="email"
                     className="form-control form-control-lg"
                     type="text"

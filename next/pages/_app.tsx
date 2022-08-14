@@ -22,6 +22,7 @@ type AppPropsWithLayout = AppProps & {
 
 function MyApp({ Component, pageProps, user }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
+
   return (
     <UserProvider user={user}>
       <Layout>{getLayout(<Component {...pageProps} />)}</Layout>;
@@ -45,6 +46,7 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
   }
 
   const authUser = await getUserWithToken(user?.token);
+
   if (authUser) {
     return {
       ...appProps,
