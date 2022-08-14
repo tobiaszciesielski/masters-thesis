@@ -17,7 +17,7 @@ import { makeRequest } from '~/services/api';
 export const loader: LoaderFunction = async ({ params }) => {
   const { slug } = params;
 
-  const [articleResponse, commentsReponse] = await Promise.all([
+  const [articleResponse, commentsResponse] = await Promise.all([
     makeRequest(`/articles/${slug}`, 'GET', {}),
     makeRequest(`/articles/${slug}/comments`, 'GET', {}),
   ]);
@@ -29,7 +29,7 @@ export const loader: LoaderFunction = async ({ params }) => {
   }
 
   const { article } = await articleResponse.json();
-  const { comments } = await commentsReponse.json();
+  const { comments } = await commentsResponse.json();
   return json({ article, comments });
 };
 

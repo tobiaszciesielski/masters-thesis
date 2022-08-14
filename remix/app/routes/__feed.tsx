@@ -2,12 +2,13 @@ import { json } from '@remix-run/node';
 import type { LoaderFunction } from '@remix-run/node';
 
 import { NavLink, Outlet, useLoaderData, useParams } from '@remix-run/react';
-import API_BASE from '~/services/api';
 import FeedToggle from '~/components/FeedToggle';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getAllTags } from '~/services/tags';
 
 export const loader: LoaderFunction = async () => {
-  const tags = await fetch(`${API_BASE}/tags`).then((res) => res.json());
+  const response = await getAllTags();
+  const tags = await response.json();
 
   return json(tags);
 };
@@ -16,6 +17,10 @@ export default function FeedLayout() {
   const { tags } = useLoaderData();
   const params = useParams();
   const [selectedTag, setSelectedTag] = useState(params.tag);
+
+  useEffect(() => {
+    setSelectedTag(params.tag);
+  }, [params.tag]);
 
   return (
     <div className="home-page">

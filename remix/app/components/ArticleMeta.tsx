@@ -2,6 +2,7 @@ import { NavLink, useNavigate } from '@remix-run/react';
 import type { Article } from '~/models/Article';
 import type { User } from '~/models/User';
 import { makeRequest } from '~/services/api';
+import AuthRequired from './AuthRequired';
 
 export interface ArticleMetaProps {
   article: Article;
@@ -35,36 +36,38 @@ export const ArticleMeta = ({ article, user }: ArticleMetaProps) => {
         </NavLink>
         <span className="date">{article.createdAt}</span>
       </div>
-      {article.author.username === user?.username ? (
-        <>
-          <NavLink
-            className="btn btn-outline-secondary btn-sm"
-            to={`/editor/${article.slug}`}
-          >
-            <i className="ion-edit"></i> Edit Article
-          </NavLink>
-          &nbsp;&nbsp;
-          <button
-            onClick={deleteArticle}
-            className="btn btn-outline-danger btn-sm"
-          >
-            <i className="ion-trash-a"></i> Delete Article
-          </button>
-        </>
-      ) : (
-        <>
-          <button className="btn btn-sm btn-outline-secondary">
-            <i className="ion-plus-round"></i>
-            &nbsp; Follow {article.author.username}{' '}
-          </button>
-          &nbsp;&nbsp;
-          <button className="btn btn-sm btn-outline-primary">
-            <i className="ion-heart"></i>
-            &nbsp; Favorite Post{' '}
-            <span className="counter">({article.favoritesCount})</span>
-          </button>
-        </>
-      )}
+      <AuthRequired>
+        {article.author.username === user?.username ? (
+          <>
+            <NavLink
+              className="btn btn-outline-secondary btn-sm"
+              to={`/editor/${article.slug}`}
+            >
+              <i className="ion-edit"></i> Edit Article
+            </NavLink>
+            &nbsp;&nbsp;
+            <button
+              onClick={deleteArticle}
+              className="btn btn-outline-danger btn-sm"
+            >
+              <i className="ion-trash-a"></i> Delete Article
+            </button>
+          </>
+        ) : (
+          <>
+            <button className="btn btn-sm btn-outline-secondary">
+              <i className="ion-plus-round"></i>
+              &nbsp; Follow {article.author.username}{' '}
+            </button>
+            &nbsp;&nbsp;
+            <button className="btn btn-sm btn-outline-primary">
+              <i className="ion-heart"></i>
+              &nbsp; Favorite Post{' '}
+              <span className="counter">({article.favoritesCount})</span>
+            </button>
+          </>
+        )}
+      </AuthRequired>
     </div>
   );
 };

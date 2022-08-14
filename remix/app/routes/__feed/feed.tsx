@@ -2,21 +2,16 @@ import { json } from '@remix-run/node';
 import type { LoaderFunction } from '@remix-run/node';
 
 import { useLoaderData } from '@remix-run/react';
-import { makeRequest } from '~/services/api';
 
 import { requireUserSession } from '~/lib/session-utils';
 import { ArticlesFeed } from '~/components/ArticlesFeed';
 import type { ArticlesResponse } from '~/models/Article';
+import { getUserFeed } from '~/services/articles';
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUserSession(request);
 
-  const articlesResponse = await makeRequest(
-    '/articles/feed',
-    'GET',
-    { limit: 20, offset: 0 },
-    user?.token
-  );
+  const articlesResponse = await getUserFeed(user);
   const articles = await articlesResponse.json();
 
   return json<ArticlesResponse>(articles);

@@ -3,7 +3,7 @@ import type { User } from '~/models/User';
 import { getUserWithToken } from '~/services/auth';
 import { commitSession, getSession } from '~/session';
 
-const AUTH_TOKEN_KEY = 'auth_token';
+const AUTH_TOKEN_KEY = 'remix_auth_token';
 
 export async function getUser(request: Request): Promise<User | null> {
   const session = await getSession(request.headers.get('Cookie'));
@@ -13,9 +13,7 @@ export async function getUser(request: Request): Promise<User | null> {
   return user;
 }
 
-export async function requireUserSession(
-  request: Request
-): Promise<User | null> {
+export async function requireUserSession(request: Request): Promise<User> {
   const session = await getSession(request.headers.get('Cookie'));
   const token = session.get(AUTH_TOKEN_KEY) as string;
 
@@ -23,6 +21,7 @@ export async function requireUserSession(
     throw redirect('/login');
   }
 
+  // @ts-ignore
   return getUserWithToken(token);
 }
 

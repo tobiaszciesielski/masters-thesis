@@ -70,7 +70,6 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const { article } = await response.json();
 
-  // TODO redirect to newly created article
   return redirect(`/articles/${article.slug}`);
 };
 
