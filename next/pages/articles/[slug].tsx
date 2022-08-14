@@ -2,7 +2,6 @@ import { GetServerSideProps, NextPage } from 'next';
 
 import { withIronSessionSsr } from 'iron-session/next';
 
-
 import { makeRequest } from '../../services/api';
 import { Article } from '../../models/Article';
 import { useUser } from '../../context/user';
@@ -116,7 +115,7 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({
                 <div className="card-footer">
                   <Image
                     // @ts-ignore
-                    src={user.image}
+                    src={user?.image}
                     width={32}
                     height={32}
                     className="comment-author-img"

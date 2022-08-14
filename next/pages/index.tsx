@@ -9,7 +9,7 @@ import { ArticlesFeed } from '../components/ArticlesFeed';
 import { sessionOptions } from '../lib/session';
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
-  async ({ req, res }) => {
+  async ({ req }) => {
     const user = req.session.user || null;
 
     const [{ articles }, { tags }] = await Promise.all([

@@ -8,9 +8,8 @@ import { withIronSessionSsr } from 'iron-session/next';
 import { NextPageWithLayout } from './_app';
 import { sessionOptions } from '../lib/session';
 
-
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
-  async ({ req, res, query }) => {
+  async ({ req, query }) => {
     if (!query.tag) {
       return {
         redirect: {

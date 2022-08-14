@@ -10,7 +10,9 @@ interface UserArticlesToggleProps {
   profileName: string;
 }
 
-const UserArticlesToggle = ({ profileName }: UserArticlesToggleProps) => {
+export const UserArticlesToggle = ({
+  profileName,
+}: UserArticlesToggleProps) => {
   const router = useRouter();
 
   return (
@@ -59,5 +61,3 @@ const UserArticlesToggle = ({ profileName }: UserArticlesToggleProps) => {
     </div>
   );
 };
-
-export default UserArticlesToggle;

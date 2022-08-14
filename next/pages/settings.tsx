@@ -14,10 +14,7 @@ interface UserData {
   password?: string;
 }
 
-export const getServerSideProps = withIronSessionSsr(async function ({
-  req,
-  res,
-}) {
+export const getServerSideProps = withIronSessionSsr(async ({ req }) => {
   const { user } = req.session;
 
   if (!user) {
@@ -32,8 +29,7 @@ export const getServerSideProps = withIronSessionSsr(async function ({
   return {
     props: { user },
   };
-},
-sessionOptions);
+}, sessionOptions);
 
 const Settings: NextPage = (props: any) => {
   const router = useRouter();
