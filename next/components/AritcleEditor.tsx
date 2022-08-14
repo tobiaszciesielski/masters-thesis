@@ -1,17 +1,42 @@
+import { useRouter } from 'next/router';
 import React from 'react';
+import { useUser } from '../context/user';
 import { Article } from '../models/Article';
+import { makeRequest } from '../services/api';
 
 interface ArticleEditorProps {
   article?: Article;
 }
 
 export const ArticleEditor = ({ article }: ArticleEditorProps) => {
+  const user = useUser();
+  const router = useRouter();
+
+  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const values = Object.fromEntries(formData);
+    const response = await makeRequest(
+      '/editor',
+      'POST',
+      values,
+      user?.token,
+      true
+    );
+
+    if (response.status === 200) {
+      const updatedUser = await response.json();
+      router.push(`/profile/${updatedUser?.username}`);
+    }
+  };
+
   return (
     <div className="editor-page">
       <div className="container page">
         <div className="row">
           <div className="col-md-10 offset-md-1 col-xs-12">
-            <form method="post">
+            <form onSubmit={submit}>
               <fieldset>
                 <fieldset className="form-group">
                   <input
