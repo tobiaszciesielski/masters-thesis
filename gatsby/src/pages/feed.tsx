@@ -2,7 +2,7 @@ import React from 'react';
 import { GetServerData, GetServerDataReturn, navigate } from 'gatsby';
 import { ArticlesFeed } from '../../components/ArticlesFeed';
 import { getUser } from '../../lib/session';
-import { getFeedByTag } from '../../services/articles';
+import { getUserFeed } from '../../services/articles';
 import { getAllTags } from '../../services/tags';
 
 export const getServerData: GetServerData<any> = async (
@@ -18,10 +18,8 @@ export const getServerData: GetServerData<any> = async (
     };
   }
 
-  const tagParam = req.params?.tag as string;
-
   const [{ articles }, { tags }] = await Promise.all([
-    (await getFeedByTag(user, tagParam)).json(),
+    (await getUserFeed(user)).json(),
     (await getAllTags()).json(),
   ]);
 

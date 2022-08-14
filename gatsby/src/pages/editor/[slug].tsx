@@ -1,6 +1,6 @@
 import React from 'react';
 import { getUser } from '../../../lib/session';
-import { GetServerData, GetServerDataReturn, navigate } from 'gatsby';
+import { GetServerData, GetServerDataReturn } from 'gatsby';
 import { makeRequest } from '../../../services/api';
 import { ArticleEditor } from '../../../components/AritcleEditor';
 

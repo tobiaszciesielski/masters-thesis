@@ -2,7 +2,7 @@ import { User } from '../models/User';
 import { makeRequest } from './api';
 
 export const getUserFeed = async (
-  user: User,
+  user: User | null,
   author?: string
 ): Promise<Response> => {
   const articlesResponse = await makeRequest(
@@ -51,11 +51,16 @@ export const getFeedByTag = async (
   user: User | null,
   tag: string
 ): Promise<Response> => {
-  const articlesResponse = await makeRequest('/articles', 'GET', {
-    limit: 20,
-    offset: 0,
-    tag: tag,
-  });
+  const articlesResponse = await makeRequest(
+    '/articles',
+    'GET',
+    {
+      limit: 20,
+      offset: 0,
+      tag: tag,
+    },
+    user?.token
+  );
 
   return articlesResponse;
 };

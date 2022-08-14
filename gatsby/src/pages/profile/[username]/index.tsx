@@ -2,7 +2,7 @@ import React from 'react';
 import { ArticlesFeed } from '../../../../components/ArticlesFeed';
 import { getProfile } from '../../../../services/profile';
 import { getArticlesByAuthor } from '../../../../services/articles';
-import { GetServerData, navigate } from 'gatsby';
+import { GetServerData } from 'gatsby';
 import { getUser } from '../../../../lib/session';
 
 export const getServerData: GetServerData<any> = async (req) => {

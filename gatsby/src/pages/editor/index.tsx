@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArticleEditor } from '../../../components/AritcleEditor';
-import { GetServerData, GetServerDataReturn, navigate } from 'gatsby';
+import { GetServerData, GetServerDataReturn } from 'gatsby';
 import { getUser } from '../../../lib/session';
 
 interface ArticleData {

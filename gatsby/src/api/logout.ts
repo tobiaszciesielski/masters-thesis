@@ -1,7 +1,5 @@
 import { GatsbyFunctionRequest, GatsbyFunctionResponse } from 'gatsby';
-import { createSessionCookie, destroySessionCookie } from '../../lib/session';
-import { User } from '../../models/User';
-import { makeRequest } from '../../services/api';
+import { destroySessionCookie } from '../../lib/session';
 
 export default async function handler(
   req: GatsbyFunctionRequest,
