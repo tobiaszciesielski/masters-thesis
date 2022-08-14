@@ -38,12 +38,6 @@ export default function Login() {
             <p className="text-xs-center">
               <NavLink to="/register">Need an account?</NavLink>
             </p>
-
-            {/*
-            <ul className="error-messages">
-              <li>That email is already taken</li>
-            </ul> */}
-
             <form method="post">
               <fieldset className="form-group">
                 <input

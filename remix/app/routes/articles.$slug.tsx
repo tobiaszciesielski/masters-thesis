@@ -1,7 +1,12 @@
 import type { ActionFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { NavLink, useLoaderData, useParams } from '@remix-run/react';
-import { useState } from 'react';
+import {
+  NavLink,
+  useFetcher,
+  useLoaderData,
+  useParams,
+} from '@remix-run/react';
+import { useEffect, useState } from 'react';
 import { ArticleMeta } from '~/components/ArticleMeta';
 import AuthRequired from '~/components/AuthRequired';
 import { TagList } from '~/components/TagList';
@@ -13,6 +18,7 @@ import type { Article } from '~/models/Article';
 import type { Comment } from '~/models/Comment';
 
 import { makeRequest } from '~/services/api';
+import { deleteComment } from '~/services/article';
 
 export const loader: LoaderFunction = async ({ params }) => {
   const { slug } = params;
@@ -63,16 +69,18 @@ export default function ArticleDetails() {
   }>();
   const [comments, setComments] = useState(articleData.comments);
   const params = useParams();
-
+  const fetcher = useFetcher();
   const user = useUser();
 
-  const deleteComment = async (commentToDelete: Comment) => {
-    const response = await makeRequest(
-      `/articles/${params.slug}/comments/${commentToDelete.id}`,
-      'DELETE',
-      {},
-      user?.token
-    );
+  useEffect(() => {
+    if (fetcher.state !== 'idle') {
+      setComments([fetcher.data, ...comments]);
+    }
+  }, [fetcher.data]);
+
+  const deleteArticleComment = async (commentToDelete: Comment) => {
+    const { slug } = params as any;
+    const response = await deleteComment(user?.token, slug, commentToDelete.id);
 
     if (response.status !== 200) {
       return;
@@ -111,7 +119,7 @@ export default function ArticleDetails() {
         <AuthRequired>
           <div className="row">
             <div className="col-xs-12 col-md-8 offset-md-2">
-              <form method="post" className="card comment-form">
+              <fetcher.Form method="post" className="card comment-form">
                 <div className="card-block">
                   <textarea
                     name="body"
@@ -137,7 +145,7 @@ export default function ArticleDetails() {
                     {user?.username}
                   </NavLink>
                 </div>
-              </form>
+              </fetcher.Form>
 
               {!!comments.length &&
                 comments.map((comment) => (
@@ -167,7 +175,7 @@ export default function ArticleDetails() {
                       {user?.username === comment.author.username && (
                         <div className="mod-options">
                           <i
-                            onClick={() => deleteComment(comment)}
+                            onClick={() => deleteArticleComment(comment)}
                             className="ion-trash-a"
                           ></i>
                         </div>

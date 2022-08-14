@@ -29,3 +29,32 @@ export const removeFromFavorites = async (
 
   return response;
 };
+
+export const addComment = async (
+  token: string | undefined,
+  slug: string
+): Promise<any> => {
+  const response = await makeRequest(
+    `/articles/${slug}/comments`,
+    'DELETE',
+    {},
+    token
+  );
+
+  return response;
+};
+
+export const deleteComment = async (
+  token: string | undefined,
+  slug: string,
+  commentId: number
+): Promise<any> => {
+  const response = await makeRequest(
+    `/articles/${slug}/comments/${commentId}`,
+    'DELETE',
+    {},
+    token
+  );
+
+  return response;
+};

@@ -4,6 +4,7 @@ import { makeRequest } from '~/services/api';
 import { createSessionCookie } from '~/lib/session-utils';
 import type { User } from '~/models/User';
 import { NavLink } from '@remix-run/react';
+import { useFetcher } from '@remix-run/react';
 
 interface RegisterData {
   username?: string;
@@ -30,6 +31,8 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Register() {
+  const fetcher = useFetcher();
+
   return (
     <div className="auth-page">
       <div className="container page">
@@ -40,7 +43,7 @@ export default function Register() {
               <NavLink to="/login">Have an account?</NavLink>
             </p>
 
-            <form method="post">
+            <fetcher.Form method="post">
               <fieldset className="form-group">
                 <input
                   className="form-control form-control-lg"
@@ -68,7 +71,7 @@ export default function Register() {
               <button className="btn btn-lg btn-primary pull-xs-right">
                 Sign up
               </button>
-            </form>
+            </fetcher.Form>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import type { LoaderFunction, ActionFunction } from '@remix-run/node';
 import { makeRequest } from '~/services/api';
 import { requireUserSession } from '~/lib/session-utils';
 import type { Article } from '~/models/Article';
-import { useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 import { getUserByToken } from '~/services/auth';
 
 interface ArticleData {
@@ -77,13 +77,14 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default function Editor() {
   const { article } = useLoaderData<{ article?: Article }>();
+  const fetcher = useFetcher();
 
   return (
     <div className="editor-page">
       <div className="container page">
         <div className="row">
           <div className="col-md-10 offset-md-1 col-xs-12">
-            <form method="post">
+            <fetcher.Form method="post">
               <fieldset>
                 <fieldset className="form-group">
                   <input
@@ -132,7 +133,7 @@ export default function Editor() {
                   {article ? 'Edit' : 'Publish'} Article
                 </button>
               </fieldset>
-            </form>
+            </fetcher.Form>
           </div>
         </div>
       </div>

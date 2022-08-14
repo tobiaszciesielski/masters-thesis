@@ -1,9 +1,9 @@
 import { redirect } from '@remix-run/node';
 import type { ActionFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData, useTransition } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
-import { getUser, requireUserSession } from '~/lib/session-utils';
+import { requireUserSession } from '~/lib/session-utils';
 import type { User } from '~/models/User';
 import { updateUser } from '~/services/user';
 import { getUserByToken } from '~/services/auth';
@@ -45,7 +45,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Settings() {
   const user = useLoaderData<User>();
-  const transition = useTransition();
+  const fetcher = useFetcher();
 
   return (
     <div className="settings-page">
@@ -54,12 +54,9 @@ export default function Settings() {
           <div className="col-md-6 offset-md-3 col-xs-12">
             <h1 className="text-xs-center">Your Settings</h1>
 
-            <form method="post">
+            <fetcher.Form method="post">
               <fieldset>
-                <fieldset
-                  className="form-group"
-                  disabled={transition.state === 'submitting'}
-                >
+                <fieldset className="form-group">
                   <input
                     defaultValue={user.image}
                     name="image"
@@ -68,10 +65,7 @@ export default function Settings() {
                     placeholder="URL of profile picture"
                   />
                 </fieldset>
-                <fieldset
-                  className="form-group"
-                  disabled={transition.state === 'submitting'}
-                >
+                <fieldset className="form-group">
                   <input
                     defaultValue={user?.username}
                     name="username"
@@ -80,10 +74,7 @@ export default function Settings() {
                     placeholder="Your Name"
                   />
                 </fieldset>
-                <fieldset
-                  className="form-group"
-                  disabled={transition.state === 'submitting'}
-                >
+                <fieldset className="form-group">
                   <textarea
                     defaultValue={user.bio}
                     name="bio"
@@ -92,10 +83,7 @@ export default function Settings() {
                     placeholder="Short bio about you"
                   ></textarea>
                 </fieldset>
-                <fieldset
-                  className="form-group"
-                  disabled={transition.state === 'submitting'}
-                >
+                <fieldset className="form-group">
                   <input
                     defaultValue={user.email}
                     name="email"
@@ -104,10 +92,7 @@ export default function Settings() {
                     placeholder="Email"
                   />
                 </fieldset>
-                <fieldset
-                  className="form-group"
-                  disabled={transition.state === 'submitting'}
-                >
+                <fieldset className="form-group">
                   <input
                     name="password"
                     className="form-control form-control-lg"
@@ -115,14 +100,11 @@ export default function Settings() {
                     placeholder="Password"
                   />
                 </fieldset>
-                <button
-                  disabled={transition.state === 'submitting'}
-                  className="btn btn-lg btn-primary pull-xs-right"
-                >
+                <button className="btn btn-lg btn-primary pull-xs-right">
                   Update Settings
                 </button>
               </fieldset>
-            </form>
+            </fetcher.Form>
 
             <hr />
 
