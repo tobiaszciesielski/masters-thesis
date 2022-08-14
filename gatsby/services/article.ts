@@ -57,14 +57,15 @@ export const removeFromFavorites = async (
 };
 
 export const addComment = async (
-  user: User | null,
-  slug: string
+  token: string | undefined,
+  slug: string,
+  body: Object
 ): Promise<any> => {
   const response = await makeRequest(
     `/articles/${slug}/comments`,
-    'DELETE',
-    {},
-    user?.token
+    'POST',
+    { comment: body },
+    token
   );
 
   return response;

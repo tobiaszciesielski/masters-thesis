@@ -11,6 +11,7 @@ import { useUser } from '../../../context/user';
 import { Article } from '../../../models/Article';
 import { Comment } from '../../../models/Comment';
 import { TagList } from '../../../components/TagList';
+import { addComment } from '../../../services/article';
 
 interface LoginData {
   username?: string;
@@ -72,6 +73,21 @@ const ArticleDetails = (props: _PageProps<ArticleDetailsProps>) => {
     );
   };
 
+  const addArticleComment = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget) as any;
+    const commentBody = Object.fromEntries(formData);
+    const slug = params.slug as string;
+    const response = await addComment(user?.token, slug, commentBody);
+    if (response.status !== 200) {
+      return;
+    }
+    const { comment } = await response.json();
+
+    setComments([comment, ...comments]);
+  };
+
   return (
     <div className="article-page">
       <div className="banner">
@@ -100,7 +116,7 @@ const ArticleDetails = (props: _PageProps<ArticleDetailsProps>) => {
         <AuthRequired>
           <div className="row">
             <div className="col-xs-12 col-md-8 offset-md-2">
-              <form method="post" className="card comment-form">
+              <form onSubmit={addArticleComment} className="card comment-form">
                 <div className="card-block">
                   <textarea
                     name="body"
