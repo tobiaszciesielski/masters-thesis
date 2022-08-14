@@ -26,8 +26,8 @@ export const ArticleEditor = ({ article }: ArticleEditorProps) => {
     );
 
     if (response.status === 200) {
-      const updatedUser = await response.json();
-      router.push(`/profile/${updatedUser?.username}`);
+      const article = await response.json();
+      router.push(`/articles/${article.slug}`);
     }
   };
 
