@@ -4,6 +4,11 @@ import { useRouter } from 'next/router';
 
 import { makeRequest } from '../services/api';
 
+interface LoginData {
+  username?: string;
+  password?: string;
+}
+
 const Login: NextPage = () => {
   const router = useRouter();
 
@@ -11,7 +16,7 @@ const Login: NextPage = () => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const values = Object.fromEntries(formData);
+    const values = Object.fromEntries(formData) as LoginData;
 
     const response = await makeRequest(
       '/login',

@@ -11,7 +11,7 @@ interface RegisterData {
 }
 
 export default withIronSessionApiRoute(async (req, res) => {
-  let formData = (await req.body) as RegisterData;
+  let formData = await req.body;
 
   const response = await makeRequest('/users', 'POST', {
     user: formData,

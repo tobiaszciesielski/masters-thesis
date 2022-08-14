@@ -3,6 +3,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { makeRequest } from '../services/api';
 
+interface RegisterData {
+  username?: string;
+  password?: string;
+  email?: string;
+}
+
 const Register: NextPage = () => {
   const router = useRouter();
 
@@ -10,7 +16,7 @@ const Register: NextPage = () => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const values = Object.fromEntries(formData);
+    const values = Object.fromEntries(formData) as RegisterData;
 
     const response = await makeRequest(
       '/register',
