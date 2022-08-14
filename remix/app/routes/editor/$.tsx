@@ -109,10 +109,7 @@ export default function Editor() {
                 </fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={article?.tagList.reduce(
-                      (prev, tag) => `${prev} ${tag}`,
-                      ''
-                    )}
+                    defaultValue={article?.tagList.join(' ')}
                     name="tags"
                     type="text"
                     className="form-control"

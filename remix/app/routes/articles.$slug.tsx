@@ -1,24 +1,18 @@
-import type { ActionFunction, LoaderFunction } from '@remix-run/node';
+import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import {
-  NavLink,
-  useFetcher,
-  useLoaderData,
-  useParams,
-} from '@remix-run/react';
-import { useEffect, useState } from 'react';
+import { NavLink, useLoaderData, useParams } from '@remix-run/react';
+import { useState } from 'react';
 import { ArticleMeta } from '~/components/ArticleMeta';
 import AuthRequired from '~/components/AuthRequired';
 import { TagList } from '~/components/TagList';
 
 import { useUser } from '~/context/user';
-import { requireUserSession } from '~/lib/session-utils';
 
 import type { Article } from '~/models/Article';
 import type { Comment } from '~/models/Comment';
 
 import { makeRequest } from '~/services/api';
-import { deleteComment } from '~/services/article';
+import { addComment, deleteComment } from '~/services/article';
 
 export const loader: LoaderFunction = async ({ params }) => {
   const { slug } = params;
@@ -39,29 +33,6 @@ export const loader: LoaderFunction = async ({ params }) => {
   return json({ article, comments });
 };
 
-export const action: ActionFunction = async ({ request, params }) => {
-  let formData = await request.formData();
-  const values = Object.fromEntries(formData) as { body: string };
-
-  const token = await requireUserSession(request);
-
-  const { slug } = params;
-
-  const response = await makeRequest(
-    `/articles/${slug}/comments`,
-    'POST',
-    {
-      comment: values,
-    },
-    token
-  );
-  if (response.status !== 200) {
-    return json({ error: 'Please try again' });
-  }
-  const { comment } = await response.json();
-  return json(comment);
-};
-
 export default function ArticleDetails() {
   const articleData = useLoaderData<{
     article: Article;
@@ -69,14 +40,7 @@ export default function ArticleDetails() {
   }>();
   const [comments, setComments] = useState(articleData.comments);
   const params = useParams();
-  const fetcher = useFetcher();
   const user = useUser();
-
-  useEffect(() => {
-    if (fetcher.state !== 'idle') {
-      setComments([fetcher.data, ...comments]);
-    }
-  }, [fetcher.data]);
 
   const deleteArticleComment = async (commentToDelete: Comment) => {
     const { slug } = params as any;
@@ -89,6 +53,21 @@ export default function ArticleDetails() {
     setComments(
       comments.filter((comment) => comment.id !== commentToDelete.id)
     );
+  };
+
+  const addArticleComment = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const commentBody = Object.fromEntries(formData);
+    const { slug } = params as any;
+    const response = await addComment(user?.token, slug, commentBody);
+    if (response.status !== 200) {
+      return;
+    }
+    const { comment } = await response.json();
+
+    setComments([comment, ...comments]);
   };
 
   return (
@@ -119,7 +98,7 @@ export default function ArticleDetails() {
         <AuthRequired>
           <div className="row">
             <div className="col-xs-12 col-md-8 offset-md-2">
-              <fetcher.Form method="post" className="card comment-form">
+              <form onSubmit={addArticleComment} className="card comment-form">
                 <div className="card-block">
                   <textarea
                     name="body"
@@ -145,7 +124,7 @@ export default function ArticleDetails() {
                     {user?.username}
                   </NavLink>
                 </div>
-              </fetcher.Form>
+              </form>
 
               {!!comments.length &&
                 comments.map((comment) => (
