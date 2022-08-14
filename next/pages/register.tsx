@@ -1,13 +1,30 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
-
-interface RegisterData {
-  username?: string;
-  password?: string;
-  email?: string;
-}
+import { useRouter } from 'next/router';
+import { makeRequest } from '../services/api';
 
 const Register: NextPage = () => {
+  const router = useRouter();
+
+  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const values = Object.fromEntries(formData);
+
+    const response = await makeRequest(
+      '/register',
+      'POST',
+      values,
+      undefined,
+      true
+    );
+
+    if (response.status === 200) {
+      router.push('/');
+    }
+  };
+
   return (
     <div className="auth-page">
       <div className="container page">
@@ -20,7 +37,7 @@ const Register: NextPage = () => {
               </Link>
             </p>
 
-            <form method="post">
+            <form onSubmit={submit}>
               <fieldset className="form-group">
                 <input
                   className="form-control form-control-lg"
