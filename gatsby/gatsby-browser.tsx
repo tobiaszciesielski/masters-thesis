@@ -5,13 +5,11 @@ import { Layout } from './components/Layout';
 import { FeedLayout } from './components/FeedLayout';
 import { ProfileLayout } from './components/ProfileLayout';
 import { UserProvider } from './context/user';
-import { getAuthTokenFromCookies } from './lib/session';
 
 export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
   element,
   props,
 }) => {
-  // console.log('browser', props.serverData);
   if (
     ['/profile/:username', '/profile/:username/favorites'].includes(props.path)
   ) {

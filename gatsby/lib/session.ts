@@ -20,7 +20,6 @@ export const getAuthTokenFromCookies = (
 export async function getApiRouteUser(
   request: GatsbyFunctionRequest
 ): Promise<User | null> {
-  console.log(request.cookies);
   const token = request.cookies[AUTH_TOKEN_KEY];
   if (!token) return null;
 

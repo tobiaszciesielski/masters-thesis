@@ -1,17 +1,41 @@
+import { navigate } from 'gatsby';
 import React from 'react';
+import { useUser } from '../context/user';
 import { Article } from '../models/Article';
+import { makeRequest } from '../services/api';
 
 interface ArticleEditorProps {
   article?: Article;
 }
 
 export const ArticleEditor = (props: ArticleEditorProps) => {
+  const user = useUser();
+
+  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget) as any;
+    const values = Object.fromEntries(formData);
+    const response = await makeRequest(
+      '/editor',
+      'POST',
+      values,
+      user?.token,
+      true
+    );
+
+    if (response.status === 200) {
+      const article = await response.json();
+      navigate(`/articles/${article.slug}`);
+    }
+  };
+
   return (
     <div className="editor-page">
       <div className="container page">
         <div className="row">
           <div className="col-md-10 offset-md-1 col-xs-12">
-            <form method="post">
+            <form onSubmit={submit}>
               <fieldset>
                 <fieldset className="form-group">
                   <input
