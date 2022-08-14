@@ -4,6 +4,7 @@ import { makeRequest } from '~/services/api';
 import { requireUserSession } from '~/lib/session-utils';
 import type { Article } from '~/models/Article';
 import { useLoaderData } from '@remix-run/react';
+import { getUserByToken } from '~/services/auth';
 
 interface ArticleData {
   title?: string;
@@ -13,7 +14,8 @@ interface ArticleData {
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const user = await requireUserSession(request);
+  const token = await requireUserSession(request);
+  const user = await getUserByToken(token);
 
   const slug = params['*'];
   let article: Article | undefined = undefined;
@@ -36,7 +38,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const user = await requireUserSession(request);
+  const token = await requireUserSession(request);
 
   let formData = await request.formData();
   let values = Object.fromEntries(formData) as ArticleData;
@@ -53,14 +55,14 @@ export const action: ActionFunction = async ({ request, params }) => {
       `/articles/${slug}`,
       'PUT',
       { article: values },
-      user?.token
+      token
     );
   } else {
     response = await makeRequest(
       '/articles',
       'POST',
       { article: values },
-      user?.token
+      token
     );
   }
 

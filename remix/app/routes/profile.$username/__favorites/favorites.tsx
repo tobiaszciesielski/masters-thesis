@@ -8,11 +8,11 @@ import { requireUserSession } from '~/lib/session-utils';
 import { getUserFeed } from '~/services/articles';
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const user = await requireUserSession(request);
+  const token = await requireUserSession(request);
 
   const { username } = params;
 
-  const articlesResponse = await getUserFeed(user, username);
+  const articlesResponse = await getUserFeed(token, username);
   const articles = await articlesResponse.json();
 
   return json(articles);

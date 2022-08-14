@@ -3,9 +3,10 @@ import type { ActionFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData, useTransition } from '@remix-run/react';
 
-import { requireUserSession } from '~/lib/session-utils';
+import { getUser, requireUserSession } from '~/lib/session-utils';
 import type { User } from '~/models/User';
-import { makeRequest } from '~/services/api';
+import { updateUser } from '~/services/user';
+import { getUserByToken } from '~/services/auth';
 
 interface UserData {
   email?: string;
@@ -16,7 +17,8 @@ interface UserData {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await requireUserSession(request);
+  const token = await requireUserSession(request);
+  const user = await getUserByToken(token);
 
   return json(user);
 };
@@ -31,12 +33,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   const authUser = await requireUserSession(request);
 
-  const response = await makeRequest(
-    '/user',
-    'PUT',
-    { user: values },
-    authUser?.token
-  );
+  const response = await updateUser(authUser, values);
   if (response.status !== 200) {
     return json({ error: 'Please try again' });
   }

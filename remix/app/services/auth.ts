@@ -1,7 +1,7 @@
 import type { User } from '~/models/User';
 import { makeRequest } from './api';
 
-export const getUserWithToken = async (token: string): Promise<User | null> => {
+export const getUserByToken = async (token: string): Promise<User | null> => {
   const response = await makeRequest('/user', 'GET', {}, token);
   if (response.status !== 200) {
     return null;

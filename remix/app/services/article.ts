@@ -1,30 +1,30 @@
 import type { Article } from '~/models/Article';
-import type { User } from '~/models/User';
+
 import { makeRequest } from './api';
 
 export const addToFavorites = async (
-  article: Article,
-  user: User | null
+  token: string | undefined,
+  article: Article
 ): Promise<any> => {
   const response = await makeRequest(
     `/articles/${article.slug}/favorite`,
     'POST',
     {},
-    user?.token
+    token
   );
 
   return response;
 };
 
 export const removeFromFavorites = async (
-  article: Article,
-  user: User | null
+  token: string | undefined,
+  article: Article
 ): Promise<any> => {
   const response = await makeRequest(
     `/articles/${article.slug}/favorite`,
     'DELETE',
     {},
-    user?.token
+    token
   );
 
   return response;

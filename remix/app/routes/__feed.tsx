@@ -5,6 +5,7 @@ import { NavLink, Outlet, useLoaderData, useParams } from '@remix-run/react';
 import FeedToggle from '~/components/FeedToggle';
 import { useEffect, useState } from 'react';
 import { getAllTags } from '~/services/tags';
+import { useUser } from '~/context/user';
 
 export const loader: LoaderFunction = async () => {
   const response = await getAllTags();
@@ -14,6 +15,7 @@ export const loader: LoaderFunction = async () => {
 };
 
 export default function FeedLayout() {
+  const user = useUser();
   const { tags } = useLoaderData();
   const params = useParams();
   const [selectedTag, setSelectedTag] = useState(params.tag);
@@ -24,12 +26,14 @@ export default function FeedLayout() {
 
   return (
     <div className="home-page">
-      <div className="banner">
-        <div className="container">
-          <h1 className="logo-font">conduit</h1>
-          <p>A place to share your knowledge.</p>
+      {!user && (
+        <div className="banner">
+          <div className="container">
+            <h1 className="logo-font">conduit</h1>
+            <p>A place to share your knowledge.</p>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="container page">
         <div className="row">

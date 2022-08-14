@@ -37,7 +37,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   let formData = await request.formData();
   const values = Object.fromEntries(formData) as { body: string };
 
-  const authUser = await requireUserSession(request);
+  const token = await requireUserSession(request);
 
   const { slug } = params;
 
@@ -47,7 +47,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     {
       comment: values,
     },
-    authUser?.token
+    token
   );
   if (response.status !== 200) {
     return json({ error: 'Please try again' });

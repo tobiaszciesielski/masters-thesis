@@ -1,8 +1,7 @@
-import type { User } from '~/models/User';
 import { makeRequest } from './api';
 
 export const getUserFeed = async (
-  user: User | null,
+  token: string | undefined,
   author?: string
 ): Promise<Response> => {
   const articlesResponse = await makeRequest(
@@ -13,13 +12,15 @@ export const getUserFeed = async (
       offset: 0,
       author,
     },
-    user?.token
+    token
   );
 
   return articlesResponse;
 };
 
-export const getGlobalFeed = async (user: User | null): Promise<Response> => {
+export const getGlobalFeed = async (
+  token: string | undefined
+): Promise<Response> => {
   const articlesResponse = await makeRequest(
     '/articles',
     'GET',
@@ -27,28 +28,28 @@ export const getGlobalFeed = async (user: User | null): Promise<Response> => {
       limit: 20,
       offset: 0,
     },
-    user?.token
+    token
   );
 
   return articlesResponse;
 };
 
 export const getArticlesByAuthor = async (
-  user: User | null,
+  token: string | undefined,
   username: string
 ) => {
   const articlesResponse = await makeRequest(
     `/articles?author=${username}`,
     'GET',
     {},
-    user?.token
+    token
   );
 
   return articlesResponse;
 };
 
 export const getFeedByTag = async (
-  user: User | null,
+  token: string | undefined,
   tag: string
 ): Promise<Response> => {
   const articlesResponse = await makeRequest(
@@ -59,7 +60,7 @@ export const getFeedByTag = async (
       offset: 0,
       tag: tag,
     },
-    user?.token
+    token
   );
 
   return articlesResponse;

@@ -9,9 +9,9 @@ import type { ArticlesResponse } from '~/models/Article';
 import { getUserFeed } from '~/services/articles';
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await requireUserSession(request);
+  const token = await requireUserSession(request);
 
-  const articlesResponse = await getUserFeed(user);
+  const articlesResponse = await getUserFeed(token);
   const articles = await articlesResponse.json();
 
   return json<ArticlesResponse>(articles);

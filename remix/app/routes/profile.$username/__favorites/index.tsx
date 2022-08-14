@@ -5,11 +5,11 @@ import { useLoaderData } from '@remix-run/react';
 
 import { ArticlesFeed } from '~/components/ArticlesFeed';
 import type { ArticlesResponse } from '~/models/Article';
-import { getUser } from '~/lib/session-utils';
+import { getToken } from '~/lib/session-utils';
 import { getArticlesByAuthor } from '~/services/articles';
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const user = await getUser(request);
+  const user = await getToken(request);
   if (!params.username) {
     throw redirect('/');
   }

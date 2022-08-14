@@ -1,3 +1,4 @@
+import { redirect } from '@remix-run/node';
 import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { NavLink, Outlet, useLoaderData } from '@remix-run/react';
@@ -5,22 +6,19 @@ import { useEffect, useState } from 'react';
 import AuthRequired from '~/components/AuthRequired';
 import UserArticlesToggle from '~/components/UserArticlesToggle';
 import { useUser } from '~/context/user';
-import { getUser } from '~/lib/session-utils';
+import { getToken } from '~/lib/session-utils';
 import type { Profile } from '~/models/Profile';
-import { makeRequest } from '~/services/api';
-import { follow, unfollow } from '~/services/profile';
+
+import { follow, getProfile, unfollow } from '~/services/profile';
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const { username } = params;
+  if (!params.username) {
+    throw redirect('/');
+  }
 
-  const user = await getUser(request);
+  const token = await getToken(request);
 
-  const response = await makeRequest(
-    `/profiles/${username}`,
-    'GET',
-    {},
-    user?.token
-  );
+  const response = await getProfile(token, params.username);
   if (response.status === 404) {
     throw new Response('Not Found', {
       status: 404,
@@ -40,14 +38,14 @@ export default function ProfileDetails() {
   const isMyProfile = profile.username === user?.username;
 
   const followProfile = async () => {
-    const response = await follow(user, profile);
+    const response = await follow(user?.token, profile);
 
     const followingProfile = await response.json();
     setProfile(followingProfile);
   };
 
   const unfollowProfile = async () => {
-    const response = await unfollow(user, profile);
+    const response = await unfollow(user?.token, profile);
 
     const unfollowedProfile = await response.json();
     setProfile(unfollowedProfile);

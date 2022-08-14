@@ -5,16 +5,16 @@ import { useLoaderData } from '@remix-run/react';
 
 import { ArticlesFeed } from '~/components/ArticlesFeed';
 import type { ArticlesResponse } from '~/models/Article';
-import { getUser } from '~/lib/session-utils';
+import { getToken } from '~/lib/session-utils';
 import { getFeedByTag } from '~/services/articles';
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const user = await getUser(request);
+  const token = await getToken(request);
   if (!params.tag) {
     throw redirect('/');
   }
 
-  const articlesResponse = await getFeedByTag(user, params.tag);
+  const articlesResponse = await getFeedByTag(token, params.tag);
   const articles = await articlesResponse.json();
   console.log(articles);
 
