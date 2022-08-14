@@ -2,6 +2,30 @@ import type { Article } from '~/models/Article';
 
 import { makeRequest } from './api';
 
+export const createArticle = async (
+  token: string | undefined,
+  values: Object
+) => {
+  const response = makeRequest('/articles', 'POST', { article: values }, token);
+
+  return response;
+};
+
+export const updateArticle = async (
+  token: string | undefined,
+  slug: string,
+  values: Object
+) => {
+  const response = await makeRequest(
+    `/articles/${slug}`,
+    'PUT',
+    { article: values },
+    token
+  );
+
+  return response;
+};
+
 export const addToFavorites = async (
   token: string | undefined,
   article: Article

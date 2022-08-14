@@ -5,6 +5,7 @@ import { requireUserSession } from '~/lib/session-utils';
 import type { Article } from '~/models/Article';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 import { getUserByToken } from '~/services/auth';
+import { createArticle, updateArticle } from '~/services/article';
 
 interface ArticleData {
   title?: string;
@@ -51,19 +52,9 @@ export const action: ActionFunction = async ({ request, params }) => {
   let response: globalThis.Response;
 
   if (slug) {
-    response = await makeRequest(
-      `/articles/${slug}`,
-      'PUT',
-      { article: values },
-      token
-    );
+    response = await updateArticle(token, slug, values);
   } else {
-    response = await makeRequest(
-      '/articles',
-      'POST',
-      { article: values },
-      token
-    );
+    response = await createArticle(token, values);
   }
 
   if (response.status !== 200) {
