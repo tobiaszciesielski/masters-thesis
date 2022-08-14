@@ -1,12 +1,12 @@
 import { redirect } from '@remix-run/node';
 import type { ActionFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher } from '@remix-run/react';
 
 import { requireUserSession } from '~/lib/session-utils';
-import type { User } from '~/models/User';
+
 import { updateUser } from '~/services/user';
-import { getUserByToken } from '~/services/auth';
+import { useUser } from '~/context/user';
 
 interface UserData {
   email?: string;
@@ -17,10 +17,8 @@ interface UserData {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const token = await requireUserSession(request);
-  const user = await getUserByToken(token);
-
-  return json(user);
+  await requireUserSession(request);
+  return {};
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -44,7 +42,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Settings() {
-  const user = useLoaderData<User>();
+  const user = useUser();
   const fetcher = useFetcher();
 
   return (
@@ -58,7 +56,7 @@ export default function Settings() {
               <fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={user.image}
+                    defaultValue={user?.image}
                     name="image"
                     className="form-control"
                     type="text"
@@ -76,7 +74,7 @@ export default function Settings() {
                 </fieldset>
                 <fieldset className="form-group">
                   <textarea
-                    defaultValue={user.bio}
+                    defaultValue={user?.bio}
                     name="bio"
                     className="form-control form-control-lg"
                     rows={8}
@@ -85,7 +83,7 @@ export default function Settings() {
                 </fieldset>
                 <fieldset className="form-group">
                   <input
-                    defaultValue={user.email}
+                    defaultValue={user?.email}
                     name="email"
                     className="form-control form-control-lg"
                     type="text"
