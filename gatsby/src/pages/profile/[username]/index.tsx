@@ -16,8 +16,12 @@ export const getServerData: GetServerData<any> = async (req) => {
   ]);
 
   if (!profile) {
-    navigate('/');
-    return {};
+    return {
+      status: 301,
+      headers: {
+        Location: '/',
+      },
+    };
   }
 
   return {

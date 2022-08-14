@@ -8,14 +8,22 @@ import { getUser } from '../../../../lib/session';
 export const getServerData: GetServerData<any> = async (req) => {
   const user = await getUser(req);
   if (!user) {
-    navigate('/login');
-    return {};
+    return {
+      status: 301,
+      headers: {
+        Location: '/login',
+      },
+    };
   }
 
   const username = req.params?.username as string;
   if (!username) {
-    navigate('/');
-    return {};
+    return {
+      status: 301,
+      headers: {
+        Location: '/',
+      },
+    };
   }
 
   const [profile, { articles }] = await Promise.all([
@@ -23,8 +31,12 @@ export const getServerData: GetServerData<any> = async (req) => {
     (await getUserFeed(user, username)).json(),
   ]);
   if (!profile) {
-    navigate('/');
-    return {};
+    return {
+      status: 301,
+      headers: {
+        Location: '/',
+      },
+    };
   }
 
   return {

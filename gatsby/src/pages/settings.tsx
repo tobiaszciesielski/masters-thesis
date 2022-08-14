@@ -15,8 +15,12 @@ interface UserData {
 export const getServerData: GetServerData<any> = async (req) => {
   const user = await getUser(req);
   if (!user) {
-    navigate('/');
-    return {};
+    return {
+      status: 301,
+      headers: {
+        Location: '/login',
+      },
+    };
   }
 
   return {

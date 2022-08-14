@@ -3,11 +3,12 @@ import { getUserWithToken } from '../services/auth';
 import { User } from '../models/User';
 import { GatsbyFunctionResponse, GetServerDataProps } from 'gatsby';
 
-const AUTH_TOKEN_KEY = 'auth_token';
+const AUTH_TOKEN_KEY = 'gatsby_auth_token';
 
 export const getAuthTokenFromCookies = (
   cookies: string
 ): string | undefined => {
+  if (!cookies) return undefined;
   const parsedCookie = cookie.parse(cookies);
   return parsedCookie[AUTH_TOKEN_KEY];
 };

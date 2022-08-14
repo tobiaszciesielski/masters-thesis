@@ -16,21 +16,33 @@ export const getServerData: GetServerData<any> = async (
 ): GetServerDataReturn => {
   const user = await getUser(req);
   if (!user) {
-    navigate('/');
-    return {};
+    return {
+      status: 301,
+      headers: {
+        Location: '/login',
+      },
+    };
   }
 
   const slug = req.params?.slug as string;
   if (!slug) {
-    navigate('/');
-    return {};
+    return {
+      status: 301,
+      headers: {
+        Location: '/',
+      },
+    };
   }
 
   const response = await makeRequest(`/articles/${slug}`, 'GET', {});
 
   if (response.status !== 200) {
-    navigate('/');
-    return {};
+    return {
+      status: 301,
+      headers: {
+        Location: '/',
+      },
+    };
   }
 
   const { article } = await response.json();

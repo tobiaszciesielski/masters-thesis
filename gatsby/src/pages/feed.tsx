@@ -10,8 +10,12 @@ export const getServerData: GetServerData<any> = async (
 ): GetServerDataReturn => {
   const user = await getUser(req);
   if (!user) {
-    navigate('/login');
-    return {}
+    return {
+      status: 301,
+      headers: {
+        Location: '/login',
+      },
+    };
   }
 
   const tagParam = req.params?.tag as string;
