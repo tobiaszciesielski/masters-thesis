@@ -5,4 +5,4 @@ services:
     restart: always
     hostname: gatsby
     ports:
-      - 9000:9000
+      - 3002:9000

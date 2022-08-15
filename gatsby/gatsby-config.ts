@@ -4,7 +4,7 @@ import './types/types.d';
 
 const config: GatsbyConfig = {
   flags: {
-    DEV_SSR: true,
+    // DEV_SSR: true,
   },
 };
 
