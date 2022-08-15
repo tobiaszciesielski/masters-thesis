@@ -1,5 +1,5 @@
 
-FROM node:16.8
+FROM node:18
 
 WORKDIR /usr/src/app
 
