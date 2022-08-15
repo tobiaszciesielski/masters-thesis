@@ -1,0 +1,8 @@
+version: '3.9'
+services:
+  remix:
+    image: remix
+    restart: always
+    hostname: remix
+    ports:
+      - 3002:9000
