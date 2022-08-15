@@ -35,11 +35,7 @@ export default withIronSessionApiRoute(async (req, res) => {
 
   const { article } = await response.json();
 
-  return {
-    article,
-    redirect: {
-      destination: `/articles/${article.slug}`,
-      permanent: false,
-    },
-  };
+  res.status(200);
+  res.json(article);
+  res.end();
 }, sessionOptions);

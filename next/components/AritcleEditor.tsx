@@ -27,7 +27,10 @@ export const ArticleEditor = ({ article }: ArticleEditorProps) => {
 
     if (response.status === 200) {
       const article = await response.json();
-      router.push(`/articles/${article.slug}`);
+      router.push({
+        pathname: `/articles/[slug]`,
+        query: { slug: article.slug },
+      });
     }
   };
 
