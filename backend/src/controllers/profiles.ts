@@ -11,7 +11,7 @@ export const getProfile = async (req: Request, res: Response) => {
     where: { username },
     select: PROFILE_SELECT,
   });
-  if (!profile) res.status(404).send('Profile not found');
+  if (!profile) return res.status(404).send('Profile not found');
 
   const { id: profileId, ...reducedProfile } = profile!;
 
