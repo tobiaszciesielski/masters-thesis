@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:4000/api';
+const API_BASE = 'http://host.docker.internal:4000/api';
 const SSR_SERVER_API_BASE = '/api';
 
 export default API_BASE;
