@@ -3,14 +3,11 @@ import { json } from '@remix-run/node';
 import { NavLink, useLoaderData, useParams } from '@remix-run/react';
 import { useState } from 'react';
 import { ArticleMeta } from '~/components/ArticleMeta';
-import AuthRequired from '~/components/AuthRequired';
+import { AuthRequired } from '~/components/AuthRequired';
 import { TagList } from '~/components/TagList';
-
 import { useUser } from '~/context/user';
-
 import type { Article } from '~/models/Article';
 import type { Comment } from '~/models/Comment';
-
 import { makeRequest } from '~/services/api';
 import { addComment, deleteComment } from '~/services/article';
 

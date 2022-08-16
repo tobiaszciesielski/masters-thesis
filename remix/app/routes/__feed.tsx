@@ -1,6 +1,5 @@
 import { json } from '@remix-run/node';
 import type { LoaderFunction } from '@remix-run/node';
-
 import { NavLink, Outlet, useLoaderData, useParams } from '@remix-run/react';
 import FeedToggle from '~/components/FeedToggle';
 import { useEffect, useState } from 'react';

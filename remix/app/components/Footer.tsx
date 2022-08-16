@@ -1,6 +1,6 @@
 import { NavLink } from '@remix-run/react';
 
-export default function Footer() {
+export const Footer = () => {
   return (
     <footer>
       <div className="container">

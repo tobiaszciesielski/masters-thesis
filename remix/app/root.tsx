@@ -4,9 +4,8 @@ import type {
   MetaFunction,
 } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-
-import Document from './components/Document';
-import Layout from './components/Layout';
+import { Document } from './components/Document';
+import { Layout } from './components/Layout';
 import { UserProvider } from './context/user';
 import { getUser } from './lib/session-utils';
 

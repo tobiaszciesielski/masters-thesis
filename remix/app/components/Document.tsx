@@ -7,7 +7,7 @@ import {
 } from '@remix-run/react';
 import type { FC } from 'react';
 
-const Document: FC = function Document({ children }) {
+export const Document: FC = function Document({ children }) {
   return (
     <html lang="en">
       <head>
@@ -23,5 +23,3 @@ const Document: FC = function Document({ children }) {
     </html>
   );
 };
-
-export default Document;

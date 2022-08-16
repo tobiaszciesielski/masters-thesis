@@ -2,8 +2,7 @@ import { NavLink, useNavigate } from '@remix-run/react';
 import type { Article } from '~/models/Article';
 import type { User } from '~/models/User';
 import { makeRequest } from '~/services/api';
-
-import AuthRequired from './AuthRequired';
+import { AuthRequired } from './AuthRequired';
 
 export interface ArticleMetaProps {
   article: Article;

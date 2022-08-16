@@ -2,9 +2,7 @@ import { redirect } from '@remix-run/node';
 import type { ActionFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useFetcher } from '@remix-run/react';
-
 import { requireUserSession } from '~/lib/session-utils';
-
 import { updateUser } from '~/services/user';
 import { useUser } from '~/context/user';
 

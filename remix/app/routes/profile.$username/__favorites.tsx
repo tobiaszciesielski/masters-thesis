@@ -3,13 +3,12 @@ import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { NavLink, Outlet, useLoaderData } from '@remix-run/react';
 import { useEffect, useState } from 'react';
-import AuthRequired from '~/components/AuthRequired';
-import UserArticlesToggle from '~/components/UserArticlesToggle';
 import { useUser } from '~/context/user';
 import { getToken } from '~/lib/session-utils';
 import type { Profile } from '~/models/Profile';
-
 import { follow, getProfile, unfollow } from '~/services/profile';
+import { UserArticlesToggle } from '~/components/UserArticlesToggle';
+import { AuthRequired } from '~/components/AuthRequired';
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   if (!params.username) {

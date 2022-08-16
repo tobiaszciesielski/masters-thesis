@@ -1,10 +1,10 @@
 import { NavLink } from '@remix-run/react';
-import AuthRequired from './AuthRequired';
+import { AuthRequired } from './AuthRequired';
 
 const defaultClass = 'nav-link';
 const activeClass = `${defaultClass} active`;
 
-const UserArticlesToggle = () => {
+export const UserArticlesToggle = () => {
   return (
     <div className="articles-toggle">
       <ul className="nav nav-pills outline-active">
@@ -36,5 +36,3 @@ const UserArticlesToggle = () => {
     </div>
   );
 };
-
-export default UserArticlesToggle;
