@@ -1,12 +1,11 @@
 import { GetServerSideProps } from 'next';
 import { withIronSessionSsr } from 'iron-session/next';
-
-import FeedLayout from '../components/FeedLayout';
 import { getAllTags } from '../services/tags';
 import { NextPageWithLayout } from './_app';
 import { getGlobalFeed } from '../services/articles';
 import { ArticlesFeed } from '../components/ArticlesFeed';
 import { sessionOptions } from '../lib/session';
+import { FeedLayout } from '../components/FeedLayout';
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
   async ({ req }) => {

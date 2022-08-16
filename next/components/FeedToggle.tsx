@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import AuthRequired from './AuthRequired';
+import { AuthRequired } from './AuthRequired';
 
 const defaultClass = 'nav-link';
 const activeClass = `${defaultClass} active`;
@@ -10,7 +10,10 @@ interface FeedToggleProps {
   clearSelectedTag: () => void;
 }
 
-const FeedToggle = ({ selectedTag, clearSelectedTag }: FeedToggleProps) => {
+export const FeedToggle = ({
+  selectedTag,
+  clearSelectedTag,
+}: FeedToggleProps) => {
   const router = useRouter();
 
   return (
@@ -53,5 +56,3 @@ const FeedToggle = ({ selectedTag, clearSelectedTag }: FeedToggleProps) => {
     </div>
   );
 };
-
-export default FeedToggle;

@@ -3,10 +3,10 @@ import { NextPageWithLayout } from '../../_app';
 import { withIronSessionSsr } from 'iron-session/next';
 
 import { ArticlesFeed } from '../../../components/ArticlesFeed';
-import ProfileLayout from '../../../components/ProfileLayout';
 import { getProfile } from '../../../services/profile';
 import { getArticlesByAuthor } from '../../../services/articles';
 import { sessionOptions } from '../../../lib/session';
+import { ProfileLayout } from '../../../components/ProfileLayout';
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
   async ({ req, res, query }) => {

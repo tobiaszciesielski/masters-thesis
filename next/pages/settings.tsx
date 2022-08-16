@@ -1,7 +1,5 @@
 import { NextPage } from 'next';
-
 import { withIronSessionSsr } from 'iron-session/next';
-
 import { makeRequest } from '../services/api';
 import { useRouter } from 'next/router';
 import { sessionOptions } from '../lib/session';

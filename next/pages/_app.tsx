@@ -1,15 +1,13 @@
 import { NextPage } from 'next';
 import type { AppContext, AppProps } from 'next/app';
-
 import { ReactElement, ReactNode } from 'react';
-import Layout from '../components/Layout';
 import { UserProvider } from '../context/user';
 import { getIronSession } from 'iron-session';
-
 import App from 'next/app';
 import { User } from '../models/User';
 import { getUserWithToken } from '../services/auth';
 import { sessionOptions } from '../lib/session';
+import { Layout } from '../components/Layout';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;

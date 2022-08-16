@@ -4,7 +4,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { useUser } from '../context/user';
 import { Profile } from '../models/Profile';
 import { follow, unfollow } from '../services/profile';
-import AuthRequired from './AuthRequired';
+import { AuthRequired } from './AuthRequired';
 import { UserArticlesToggle } from './UserArticlesToggle';
 
 export interface ProfileLayoutProps {
@@ -12,10 +12,10 @@ export interface ProfileLayoutProps {
   children: ReactNode;
 }
 
-export default function ProfileLayout({
+export const ProfileLayout = ({
   userProfile,
   children,
-}: ProfileLayoutProps) {
+}: ProfileLayoutProps) => {
   const [profile, setProfile] = useState(userProfile);
   const user = useUser();
 
@@ -98,4 +98,4 @@ export default function ProfileLayout({
       </div>
     </div>
   );
-}
+};

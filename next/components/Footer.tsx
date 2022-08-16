@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default function Footer() {
+export const Footer = () => {
   return (
     <footer>
       <div className="container">
@@ -15,4 +15,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+};

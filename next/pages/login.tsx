@@ -1,7 +1,6 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import { makeRequest } from '../services/api';
 
 interface LoginData {

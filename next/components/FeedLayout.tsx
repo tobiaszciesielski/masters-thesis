@@ -2,15 +2,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useUser } from '../context/user';
-
-import FeedToggle from './FeedToggle';
+import { FeedToggle } from './FeedToggle';
 
 interface FeedLayoutProps {
   children: React.ReactNode;
   tags: string[];
 }
 
-export default function FeedLayout({ children, tags }: FeedLayoutProps) {
+export const FeedLayout = ({ children, tags }: FeedLayoutProps) => {
   const router = useRouter();
   const tagParam = router.query.tag as string | undefined;
   const [selectedTag, setSelectedTag] = useState(tagParam);
@@ -65,4 +64,4 @@ export default function FeedLayout({ children, tags }: FeedLayoutProps) {
       </div>
     </div>
   );
-}
+};

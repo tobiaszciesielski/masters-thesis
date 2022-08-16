@@ -1,7 +1,5 @@
 import { GetServerSideProps, NextPage } from 'next';
-
 import { withIronSessionSsr } from 'iron-session/next';
-
 import { makeRequest } from '../../services/api';
 import { Article } from '../../models/Article';
 import { useUser } from '../../context/user';
@@ -9,12 +7,12 @@ import { useState } from 'react';
 import { Comment } from '../../models/Comment';
 import { ArticleMeta } from '../../components/ArticleMeta';
 import { TagList } from '../../components/TagList';
-import AuthRequired from '../../components/AuthRequired';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { sessionOptions } from '../../lib/session';
 import { addComment } from '../../services/article';
+import { AuthRequired } from '../../components/AuthRequired';
 
 interface ArticleDetailsProps {
   article: Article;

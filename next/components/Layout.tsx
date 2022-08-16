@@ -1,12 +1,13 @@
 import React from 'react';
-import Footer from './Footer';
-import Nav from './Nav';
+import { Footer } from './Footer';
+
+import { Nav } from './Nav';
 
 export interface LayoutProps {
   children: React.ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
+export const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <Nav />
@@ -14,4 +15,4 @@ export default function Layout({ children }: LayoutProps) {
       <Footer />
     </>
   );
-}
+};

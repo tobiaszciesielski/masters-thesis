@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { AuthRequired } from './AuthRequired';
 
-import AuthRequired from './AuthRequired';
 
 const defaultClass = 'nav-link';
 const activeClass = `${defaultClass} active`;

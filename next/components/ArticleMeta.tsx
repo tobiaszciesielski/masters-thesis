@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { Article } from '../models/Article';
 import { User } from '../models/User';
 import { makeRequest } from '../services/api';
-import AuthRequired from './AuthRequired';
+import { AuthRequired } from './AuthRequired';
 
 export interface ArticleMetaProps {
   article: Article;
