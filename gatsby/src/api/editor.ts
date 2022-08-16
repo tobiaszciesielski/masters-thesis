@@ -1,5 +1,5 @@
 import { GatsbyFunctionRequest, GatsbyFunctionResponse } from 'gatsby';
-import { getApiRouteUser, getUser } from '../../lib/session';
+import { getApiRouteUser } from '../../lib/session';
 import { createArticle, updateArticle } from '../../services/article';
 
 export default async function handler(

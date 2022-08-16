@@ -11,7 +11,7 @@ export interface ProfileLayoutProps {
   children: ReactNode;
 }
 
-export function ProfileLayout(props: ProfileLayoutProps) {
+export const ProfileLayout = (props: ProfileLayoutProps) => {
   const [profile, setProfile] = useState(props.userProfile);
   const user = useUser();
 
@@ -86,4 +86,4 @@ export function ProfileLayout(props: ProfileLayoutProps) {
       </div>
     </div>
   );
-}
+};

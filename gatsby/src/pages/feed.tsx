@@ -1,5 +1,5 @@
 import React from 'react';
-import { GetServerData, GetServerDataReturn, navigate } from 'gatsby';
+import { GetServerData, GetServerDataReturn } from 'gatsby';
 import { ArticlesFeed } from '../../components/ArticlesFeed';
 import { getUser } from '../../lib/session';
 import { getUserFeed } from '../../services/articles';

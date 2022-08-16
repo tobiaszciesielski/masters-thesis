@@ -22,9 +22,9 @@ export const ArticlesFeed = (props: ArticleFeedProps) => {
 
     let response;
     if (likedArticle.favorited) {
-      response = await removeFromFavorites(likedArticle, props.user);
+      response = await removeFromFavorites(props.user, likedArticle);
     } else {
-      response = await addToFavorites(likedArticle, props.user);
+      response = await addToFavorites(props.user, likedArticle);
     }
 
     if (response.status !== 200) {

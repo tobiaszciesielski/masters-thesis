@@ -82,5 +82,3 @@ const Register = () => {
 };
 
 export default Register;
-
-// export { Head } from '../../components/Head';

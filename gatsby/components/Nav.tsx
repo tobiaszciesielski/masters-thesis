@@ -5,7 +5,7 @@ import { useUser } from '../context/user';
 const defaultClass = 'nav-link';
 const activeClass = `${defaultClass} active`;
 
-export default function Nav() {
+export const Nav = () => {
   const user = useUser();
 
   return (
@@ -79,4 +79,4 @@ export default function Nav() {
       </div>
     </nav>
   );
-}
+};

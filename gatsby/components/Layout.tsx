@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import Footer from './Footer';
-import Nav from './Nav';
+import React from 'react';
+import { Footer } from './Footer';
+import { Nav } from './Nav';
 
 export interface LayoutProps {
   children: React.ReactNode;
 }
 
-export function Layout({ children }: LayoutProps) {
+export const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <Nav />
@@ -14,4 +14,4 @@ export function Layout({ children }: LayoutProps) {
       <Footer />
     </>
   );
-}
+};

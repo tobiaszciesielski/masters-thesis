@@ -3,13 +3,6 @@ import { ArticleEditor } from '../../../components/AritcleEditor';
 import { GetServerData, GetServerDataReturn } from 'gatsby';
 import { getUser } from '../../../lib/session';
 
-interface ArticleData {
-  title?: string;
-  body?: string;
-  description?: string;
-  tagList?: string[];
-}
-
 export const getServerData: GetServerData<any> = async (
   req
 ): GetServerDataReturn => {

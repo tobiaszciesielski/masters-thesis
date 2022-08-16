@@ -1,7 +1,6 @@
 import { GatsbyFunctionRequest, GatsbyFunctionResponse } from 'gatsby';
-import { getApiRouteUser, getUser } from '../../lib/session';
-import { User } from '../../models/User';
-import { makeRequest } from '../../services/api';
+import { getApiRouteUser } from '../../lib/session';
+
 import { updateUser } from '../../services/user';
 
 interface UserData {

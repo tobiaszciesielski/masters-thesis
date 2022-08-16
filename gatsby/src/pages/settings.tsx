@@ -4,14 +4,6 @@ import { useLogin, useLogout, useUser } from '../../context/user';
 import { getUser } from '../../lib/session';
 import { makeRequest } from '../../services/api';
 
-interface UserData {
-  email?: string;
-  username?: string;
-  bio?: string;
-  image?: string;
-  password?: string;
-}
-
 export const getServerData: GetServerData<any> = async (req) => {
   const user = await getUser(req);
   if (!user) {

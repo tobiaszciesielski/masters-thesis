@@ -4,13 +4,6 @@ import { GetServerData, GetServerDataReturn } from 'gatsby';
 import { makeRequest } from '../../../services/api';
 import { ArticleEditor } from '../../../components/AritcleEditor';
 
-interface ArticleData {
-  title?: string;
-  body?: string;
-  description?: string;
-  tagList?: string[];
-}
-
 export const getServerData: GetServerData<any> = async (
   req
 ): GetServerDataReturn => {

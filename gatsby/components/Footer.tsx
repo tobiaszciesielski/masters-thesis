@@ -1,7 +1,7 @@
 import { Link } from 'gatsby';
 import React from 'react';
 
-export default function Footer() {
+export const Footer = () => {
   return (
     <footer>
       <div className="container">

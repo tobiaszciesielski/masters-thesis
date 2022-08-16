@@ -1,5 +1,5 @@
 import { makeRequest } from '../../services/api';
-import { GetServerData, navigate, PageProps } from 'gatsby';
+import { GetServerData, navigate } from 'gatsby';
 import { Link } from 'gatsby';
 import React from 'react';
 import { getUser } from '../../lib/session';

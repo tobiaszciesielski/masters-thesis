@@ -13,11 +13,6 @@ import { Comment } from '../../../models/Comment';
 import { TagList } from '../../../components/TagList';
 import { addComment } from '../../../services/article';
 
-interface LoginData {
-  username?: string;
-  password?: string;
-}
-
 interface ArticleDetailsProps {
   article: Article;
   comments: Comment[];
